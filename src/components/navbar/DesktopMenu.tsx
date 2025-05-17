@@ -21,15 +21,18 @@ interface DesktopMenuProps {
 const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
   const location = useLocation();
 
-  // Filter out duplicate items by checking for items with the same name
-  const uniqueNavigation = navigation.reduce<NavItem[]>((acc, current) => {
-    const x = acc.find(item => item.name === current.name);
-    if (!x) {
-      return acc.concat([current]);
-    } else {
-      return acc;
+  // Create a map of names to avoid duplicates
+  const uniqueNavMap = new Map<string, NavItem>();
+  
+  // Only add items that aren't already in the map
+  navigation.forEach(item => {
+    if (!uniqueNavMap.has(item.name)) {
+      uniqueNavMap.set(item.name, item);
     }
-  }, []);
+  });
+
+  // Convert map back to array
+  const uniqueNavigation = Array.from(uniqueNavMap.values());
 
   return (
     <nav className="hidden lg:flex flex-1 space-x-1">
