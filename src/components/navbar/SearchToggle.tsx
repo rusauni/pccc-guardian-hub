@@ -39,24 +39,29 @@ const SearchToggle = ({ isSearchIconOnly }: SearchToggleProps) => {
 
   return (
     <>
-      <Button 
-        variant="outline" 
-        size={isSearchIconOnly ? "icon" : "default"}
-        className={isSearchIconOnly ? "h-9 w-9" : "h-9 w-full justify-between relative bg-background border-none"}
-        onClick={() => setOpen(true)}
-      >
-        <div className="flex items-center gap-2">
+      {isSearchIconOnly ? (
+        <Button 
+          variant="outline" 
+          size="icon"
+          className="h-9 w-9 rounded-md bg-muted border-none"
+          onClick={() => setOpen(true)}
+        >
           <Search className="h-4 w-4 text-muted-foreground" />
-          {!isSearchIconOnly && (
-            <span className="text-muted-foreground text-sm">Tìm kiếm tài liệu...</span>
-          )}
-        </div>
-        {!isSearchIconOnly && (
-          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        </Button>
+      ) : (
+        <Button 
+          variant="outline" 
+          size="sm"
+          className="h-9 w-64 justify-start px-3 text-muted-foreground bg-muted border-none rounded-md"
+          onClick={() => setOpen(true)}
+        >
+          <Search className="h-4 w-4 mr-2" />
+          <span className="text-sm">Tìm kiếm tài liệu...</span>
+          <kbd className="ml-auto pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
             <span className="text-xs">⌘</span>K
           </kbd>
-        )}
-      </Button>
+        </Button>
+      )}
       
       <CommandDialog open={open} onOpenChange={setOpen} aria-describedby="search-description">
         <DialogTitle className="sr-only">Tìm kiếm văn bản</DialogTitle>

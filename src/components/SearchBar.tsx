@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Search, FileText } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 import { 
   CommandDialog, 
@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { DialogTitle } from "@/components/ui/dialog";
+import { FileText } from 'lucide-react';
 
 const SearchBar = () => {
   const [open, setOpen] = useState(false);
@@ -43,15 +44,13 @@ const SearchBar = () => {
     <>
       <Button 
         variant="outline" 
-        size="default"
-        className="h-9 w-full justify-between relative bg-background border-none"
+        size="sm"
+        className="h-9 w-64 justify-start px-3 text-muted-foreground bg-muted border-none rounded-md"
         onClick={() => setOpen(true)}
       >
-        <div className="flex items-center gap-2">
-          <Search className="h-4 w-4 text-muted-foreground" />
-          <span className="text-muted-foreground text-sm">Tìm kiếm tài liệu...</span>
-        </div>
-        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+        <Search className="h-4 w-4 mr-2" />
+        <span className="text-sm">Tìm kiếm tài liệu...</span>
+        <kbd className="ml-auto pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-background px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
