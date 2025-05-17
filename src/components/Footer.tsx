@@ -1,13 +1,10 @@
-
 import { Link } from "react-router-dom";
-
 const Footer = () => {
-  return (
-    <footer className="bg-pccc-dark text-white py-10">
+  return <footer className="bg-pccc-dark text-white py-10">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">PCCC News</h3>
+            <h3 className="text-xl font-bold mb-4">PCCC40</h3>
             <p className="text-sm">
               Cổng thông tin điện tử về phòng cháy chữa cháy, cung cấp tin tức, kiến thức và văn bản pháp luật mới nhất.
             </p>
@@ -36,9 +33,9 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Liên hệ</h3>
             <address className="not-italic text-sm text-gray-300">
-              <p>Số 2 Phùng Hưng, Hoàn Kiếm</p>
-              <p>Hà Nội, Việt Nam</p>
-              <p className="mt-2">Email: info@pcccnews.vn</p>
+              <p>Số 1 Sala, Quận 2</p>
+              <p>Hồ Chí Minh, Việt Nam</p>
+              <p className="mt-2">Email: admin@pccc40.com</p>
               <p>Điện thoại: (024) 3636 3636</p>
             </address>
           </div>
@@ -48,8 +45,6 @@ const Footer = () => {
           <p>&copy; {new Date().getFullYear()} PCCC News. Tất cả quyền được bảo lưu.</p>
         </div>
       </div>
-    </footer>
-  );
+    </footer>;
 };
-
 export default Footer;
