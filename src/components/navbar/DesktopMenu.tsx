@@ -38,7 +38,7 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
     <nav className="hidden lg:flex flex-1 space-x-1">
       <NavigationMenu>
         <NavigationMenuList className="space-x-1">
-          {uniqueNavigation.map((item, index) => 
+          {uniqueNavigation.map((item) => 
             item.submenu ? (
               <NavigationMenuItem key={item.name}>
                 <NavigationMenuTrigger className="h-10">
