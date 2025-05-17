@@ -25,9 +25,9 @@ const App = () => {
             <Route path="/" element={<Index />} />
             <Route path="/tin-tuc" element={<NewsCategory />} />
             <Route path="/huong-dan-cong-dong" element={<NewsCategory />} />
-            <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
-            <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
             <Route path="/huong-dan-nghiep-vu" element={<NewsCategory />} />
+            <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
+            <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
             <Route path="/nghien-cuu-trao-doi" element={<NewsCategory />} />
             <Route path="/video" element={<VideoPage />} />
             <Route path="/:category/:id" element={<NewsDetail />} />
