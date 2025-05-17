@@ -5,19 +5,19 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const bannerImages = [
   {
     id: 1,
-    src: "https://source.unsplash.com/random/1200x400/?fire,safety",
+    src: "https://via.placeholder.com/1200x400?text=Phòng+cháy+chữa+cháy",
     alt: "Phòng cháy chữa cháy",
     title: "Phòng cháy và chữa cháy - Trách nhiệm của toàn dân"
   },
   {
     id: 2,
-    src: "https://source.unsplash.com/random/1200x400/?firefighter",
+    src: "https://via.placeholder.com/1200x400?text=Nhân+viên+cứu+hỏa",
     alt: "Nhân viên cứu hỏa",
     title: "Nâng cao kỹ năng PCCC cho cộng đồng"
   },
   {
     id: 3,
-    src: "https://source.unsplash.com/random/1200x400/?emergency",
+    src: "https://via.placeholder.com/1200x400?text=Tình+huống+khẩn+cấp",
     alt: "Tình huống khẩn cấp",
     title: "Bảo vệ cuộc sống - Nâng cao nhận thức về PCCC"
   },
@@ -49,7 +49,7 @@ const Banner = () => {
       {bannerImages.map((image, index) => (
         <div
           key={image.id}
-          className={`banner-slide absolute w-full h-full ${
+          className={`banner-slide absolute w-full h-full transition-opacity duration-500 ${
             index === currentSlide ? 'opacity-100 z-10' : 'opacity-0 z-0'
           }`}
         >

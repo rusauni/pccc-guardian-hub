@@ -19,14 +19,22 @@ interface NewsCardProps {
 }
 
 const NewsCard = ({ news, showExcerpt = false }: NewsCardProps) => {
+  // Sử dụng ảnh placeholder nếu image không tồn tại hoặc bị lỗi
+  const fallbackImage = "https://via.placeholder.com/400x300?text=News+Thumbnail";
+
   return (
-    <Card className="news-card h-full">
+    <Card className="news-card h-full hover:shadow-md transition-shadow">
       <CardContent className="p-0">
         <Link to={news.slug}>
           <img
-            src={news.image}
+            src={news.image || fallbackImage}
             alt={news.title}
             className="w-full h-48 object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null;
+              target.src = fallbackImage;
+            }}
           />
           <div className="p-4">
             <Badge variant="secondary" className="mb-2">

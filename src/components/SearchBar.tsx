@@ -21,9 +21,9 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="bg-pccc-light py-3">
+    <div className="bg-pccc-light py-2">
       <div className="container mx-auto px-4">
-        <form onSubmit={handleSearch} className="flex gap-2">
+        <form onSubmit={handleSearch} className="flex gap-2 max-w-2xl mx-auto">
           <Input
             type="search"
             placeholder="Tra cứu văn bản pháp luật về PCCC..."
@@ -31,7 +31,7 @@ const SearchBar = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="flex-1"
           />
-          <Button type="submit" variant="default">
+          <Button type="submit" variant="default" size="sm" className="whitespace-nowrap">
             <Search className="mr-2 h-4 w-4" /> Tìm kiếm
           </Button>
         </form>

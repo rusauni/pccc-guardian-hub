@@ -1,7 +1,17 @@
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
+import { 
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle
+} from "@/components/ui/navigation-menu";
+import { cn } from '@/lib/utils';
 
 const navigation = [
   { name: 'Trang chủ', href: '/' },
@@ -16,27 +26,44 @@ const navigation = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
 
   return (
-    <header className="bg-white shadow">
+    <header className="bg-white shadow sticky top-0 z-50">
       <nav className="container mx-auto px-4 flex items-center justify-between py-4">
         <div className="flex lg:flex-1">
           <Link to="/" className="flex items-center">
-            <img src="/placeholder.svg" alt="PCCC Logo" className="h-10 w-10" />
+            <img 
+              src="/placeholder.svg" 
+              alt="PCCC Logo" 
+              className="h-10 w-10" 
+            />
             <span className="ml-2 text-xl font-bold text-pccc-primary">PCCC News</span>
           </Link>
         </div>
         
-        <div className="hidden lg:flex lg:gap-x-6">
-          {navigation.map((item) => (
-            <Link
-              key={item.name}
-              to={item.href}
-              className="text-sm font-semibold leading-6 text-gray-900 hover:text-pccc-primary transition duration-300"
-            >
-              {item.name}
-            </Link>
-          ))}
+        <div className="hidden lg:block">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {navigation.map((item) => (
+                <NavigationMenuItem key={item.name}>
+                  <Link to={item.href}>
+                    <NavigationMenuLink 
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        location.pathname === item.href || 
+                        (item.href !== '/' && location.pathname.startsWith(item.href)) 
+                          ? "bg-pccc-light text-pccc-primary" 
+                          : "text-gray-700 hover:text-pccc-primary"
+                      )}
+                    >
+                      {item.name}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
         
         <div className="flex lg:hidden">
@@ -75,7 +102,13 @@ const Navbar = () => {
                       <Link
                         key={item.name}
                         to={item.href}
-                        className="block py-2 font-semibold text-gray-900 hover:text-pccc-primary transition duration-300"
+                        className={cn(
+                          "block py-2 font-semibold transition duration-300",
+                          location.pathname === item.href || 
+                          (item.href !== '/' && location.pathname.startsWith(item.href))
+                            ? "text-pccc-primary"
+                            : "text-gray-900 hover:text-pccc-primary"
+                        )}
                         onClick={() => setMobileMenuOpen(false)}
                       >
                         {item.name}
