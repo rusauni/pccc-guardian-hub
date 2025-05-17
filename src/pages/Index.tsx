@@ -15,15 +15,8 @@ const Index = () => {
         {/* Banner Section */}
         <Banner />
         
-        {/* Featured News Carousel */}
+        {/* Featured News Carousel with Latest News */}
         <FeaturedNewsCarousel />
-        
-        {/* Latest News Section */}
-        <CategorySection 
-          title="Tin tức PCCC mới nhất" 
-          news={latestNews} 
-          categoryUrl="/tin-tuc" 
-        />
         
         {/* Community Guides Section */}
         <CategorySection 
