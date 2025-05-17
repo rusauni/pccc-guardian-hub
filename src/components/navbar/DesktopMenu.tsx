@@ -12,7 +12,11 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu';
 import React from 'react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { 
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent
+} from '@/components/ui/hover-card';
 
 interface DesktopMenuProps {
   navigation: NavItem[];
@@ -40,33 +44,40 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
         <NavigationMenuList className="space-x-1">
           {uniqueNavigation.map((item) => 
             item.submenu ? (
-              <DropdownMenu key={item.name}>
-                <DropdownMenuTrigger className={cn(
-                  navigationMenuTriggerStyle(),
-                  location.pathname === item.href && "bg-accent text-accent-foreground",
-                  "h-10"
-                )}>
-                  <span className="flex items-center">
-                    {item.icon}
-                    {item.name}
-                  </span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="center" className="min-w-[220px]">
-                  {item.submenu.map((subItem) => (
-                    <DropdownMenuItem key={subItem.name} asChild>
-                      <Link
-                        to={subItem.href}
-                        className={cn(
-                          "w-full",
-                          location.pathname === subItem.href && "bg-accent text-accent-foreground"
-                        )}
-                      >
-                        {subItem.name}
-                      </Link>
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <NavigationMenuItem key={item.name} className="relative">
+                <HoverCard openDelay={0} closeDelay={100}>
+                  <HoverCardTrigger asChild>
+                    <div className={cn(
+                      navigationMenuTriggerStyle(),
+                      location.pathname === item.href && "bg-accent text-accent-foreground",
+                      "h-10 flex items-center cursor-pointer"
+                    )}>
+                      {item.icon}
+                      {item.name}
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent 
+                    align="start" 
+                    className="w-[220px] p-0"
+                    sideOffset={8}
+                  >
+                    <div className="flex flex-col w-full">
+                      {item.submenu.map((subItem) => (
+                        <Link
+                          key={subItem.name}
+                          to={subItem.href}
+                          className={cn(
+                            "px-3 py-2 text-sm hover:bg-accent hover:text-accent-foreground rounded-sm mx-1 my-1",
+                            location.pathname === subItem.href && "bg-accent text-accent-foreground"
+                          )}
+                        >
+                          {subItem.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+              </NavigationMenuItem>
             ) : (
               <NavigationMenuItem key={item.name}>
                 <Link
