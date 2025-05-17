@@ -4,7 +4,6 @@ import CategorySection from '@/components/CategorySection';
 import FeaturedNewsCarousel from '@/components/FeaturedNewsCarousel';
 import Footer from '@/components/Footer';
 import Navbar from '@/components/Navbar';
-import SearchBar from '@/components/SearchBar';
 import VideoCard from '@/components/VideoCard';
 import { latestNews, communityGuides, regulations, videos, procedures, professionalGuides, research } from '@/data/mockData';
 
@@ -12,7 +11,6 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <SearchBar />
       <main className="flex-grow">
         {/* Banner Section */}
         <Banner />
