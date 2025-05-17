@@ -3,8 +3,9 @@ import { Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useState, useEffect } from 'react';
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { FileText } from 'lucide-react';
+import { DialogTitle } from "@/components/ui/dialog";
 
 interface SearchToggleProps {
   isSearchIconOnly: boolean;
@@ -55,7 +56,8 @@ const SearchToggle = ({ isSearchIconOnly }: SearchToggleProps) => {
         )}
       </Button>
       
-      <CommandDialog open={open} onOpenChange={setOpen}>
+      <CommandDialog open={open} onOpenChange={setOpen} aria-describedby="search-description">
+        <DialogTitle className="sr-only">Tìm kiếm văn bản</DialogTitle>
         <CommandInput placeholder="Nhập từ khóa tìm kiếm văn bản..." />
         <CommandList>
           <CommandEmpty>Không tìm thấy văn bản pháp luật.</CommandEmpty>
@@ -88,6 +90,9 @@ const SearchToggle = ({ isSearchIconOnly }: SearchToggleProps) => {
             </CommandItem>
           </CommandGroup>
         </CommandList>
+        <span id="search-description" className="sr-only">
+          Nhập từ khóa để tìm kiếm văn bản pháp luật. Sử dụng phím mũi tên để di chuyển và Enter để chọn.
+        </span>
       </CommandDialog>
     </>
   );
