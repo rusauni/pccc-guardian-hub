@@ -3,12 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 
 // Supabase configuration
 // These should be set as environment variables in production
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || '';
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://example.supabase.co';
+const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'your-anon-key';
 
-// Check if the Supabase URL and key are provided
-if (!supabaseUrl || !supabaseKey) {
-  console.warn('Supabase URL or key is missing. Make sure to set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables.');
+// Check if the Supabase URL and key are production values
+if (supabaseUrl === 'https://example.supabase.co' || supabaseKey === 'your-anon-key') {
+  console.warn('Using development Supabase URL and key. Make sure to set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your environment variables for production.');
 }
 
 // Create and export the Supabase client
