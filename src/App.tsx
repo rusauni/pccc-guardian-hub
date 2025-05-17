@@ -14,34 +14,44 @@ import VideoDetail from "./pages/VideoDetail";
 import NotFound from "./pages/NotFound";
 import AuthDemo from "./pages/AuthDemo";
 
-const queryClient = new QueryClient();
+// Create a client
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      retry: 1,
+    },
+  },
+});
 
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <SupabaseProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/tin-tuc" element={<NewsCategory />} />
-              <Route path="/huong-dan-cong-dong" element={<NewsCategory />} />
-              <Route path="/huong-dan-nghiep-vu" element={<NewsCategory />} />
-              <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
-              <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
-              <Route path="/nghien-cuu-trao-doi" element={<NewsCategory />} />
-              <Route path="/video" element={<VideoPage />} />
-              <Route path="/auth" element={<AuthDemo />} />
-              <Route path="/:category/:id" element={<NewsDetail />} />
-              <Route path="/video/:id" element={<VideoDetail />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </SupabaseProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <SupabaseProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/tin-tuc" element={<NewsCategory />} />
+                <Route path="/huong-dan-cong-dong" element={<NewsCategory />} />
+                <Route path="/huong-dan-nghiep-vu" element={<NewsCategory />} />
+                <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
+                <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
+                <Route path="/nghien-cuu-trao-doi" element={<NewsCategory />} />
+                <Route path="/video" element={<VideoPage />} />
+                <Route path="/auth" element={<AuthDemo />} />
+                <Route path="/:category/:id" element={<NewsDetail />} />
+                <Route path="/video/:id" element={<VideoDetail />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </SupabaseProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </React.StrictMode>
   );
 };
 
