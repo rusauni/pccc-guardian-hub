@@ -4,8 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import SearchBar from '@/components/SearchBar';
 import { NavItem } from './types';
+import SearchToggle from './SearchToggle';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -37,9 +37,9 @@ const MobileMenu = ({ isOpen, onClose, mainNavigation }: MobileMenuProps) => {
             </Button>
           </div>
           
-          {/* Search bar in mobile menu */}
+          {/* Search toggle in mobile menu */}
           <div className="p-4">
-            <SearchBar />
+            <SearchToggle isSearchIconOnly={false} />
           </div>
           
           <div className="mt-2 p-4 space-y-1">
