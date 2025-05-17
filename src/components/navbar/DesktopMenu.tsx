@@ -40,15 +40,15 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
         <NavigationMenuList className="space-x-1">
           {uniqueNavigation.map((item) => 
             item.submenu ? (
-              <NavigationMenuItem key={item.name}>
+              <NavigationMenuItem key={item.name} className="relative">
                 <NavigationMenuTrigger className="h-10">
                   <span className="flex items-center">
                     {item.icon}
                     {item.name}
                   </span>
                 </NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <ul className="min-w-[220px] p-2 rounded-md">
+                <NavigationMenuContent className="absolute left-0 rounded-md border shadow-md p-1">
+                  <ul className="min-w-[220px] p-2">
                     {item.submenu.map((subItem) => (
                       <li key={subItem.name}>
                         <NavigationMenuLink asChild>
