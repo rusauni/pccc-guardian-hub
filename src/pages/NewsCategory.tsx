@@ -2,7 +2,6 @@
 import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import SearchBar from '@/components/SearchBar';
 import NewsCard from '@/components/NewsCard';
 import { 
   latestNews, 
@@ -40,7 +39,6 @@ const NewsCategory = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <SearchBar />
       <main className="flex-grow py-10">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold mb-8 text-pccc-dark">{title}</h1>
