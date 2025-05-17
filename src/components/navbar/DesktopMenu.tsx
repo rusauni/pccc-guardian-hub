@@ -36,55 +36,57 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
 
   return (
     <nav className="hidden lg:flex flex-1 space-x-1">
-      <NavigationMenuList className="space-x-1">
-        {uniqueNavigation.map((item) => 
-          item.submenu ? (
-            <DropdownMenu key={item.name}>
-              <DropdownMenuTrigger className={cn(
-                navigationMenuTriggerStyle(),
-                location.pathname === item.href && "bg-accent text-accent-foreground",
-                "h-10"
-              )}>
-                <span className="flex items-center">
-                  {item.icon}
-                  {item.name}
-                </span>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="center" className="min-w-[220px]">
-                {item.submenu.map((subItem) => (
-                  <DropdownMenuItem key={subItem.name} asChild>
-                    <Link
-                      to={subItem.href}
-                      className={cn(
-                        "w-full",
-                        location.pathname === subItem.href && "bg-accent text-accent-foreground"
-                      )}
-                    >
-                      {subItem.name}
-                    </Link>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <NavigationMenuItem key={item.name}>
-              <Link
-                to={item.href}
-                className={cn(
+      <NavigationMenu>
+        <NavigationMenuList className="space-x-1">
+          {uniqueNavigation.map((item) => 
+            item.submenu ? (
+              <DropdownMenu key={item.name}>
+                <DropdownMenuTrigger className={cn(
                   navigationMenuTriggerStyle(),
                   location.pathname === item.href && "bg-accent text-accent-foreground",
                   "h-10"
-                )}
-              >
-                <span className="flex items-center">
-                  {item.icon}
-                  {item.name}
-                </span>
-              </Link>
-            </NavigationMenuItem>
-          )
-        )}
-      </NavigationMenuList>
+                )}>
+                  <span className="flex items-center">
+                    {item.icon}
+                    {item.name}
+                  </span>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="center" className="min-w-[220px]">
+                  {item.submenu.map((subItem) => (
+                    <DropdownMenuItem key={subItem.name} asChild>
+                      <Link
+                        to={subItem.href}
+                        className={cn(
+                          "w-full",
+                          location.pathname === subItem.href && "bg-accent text-accent-foreground"
+                        )}
+                      >
+                        {subItem.name}
+                      </Link>
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <NavigationMenuItem key={item.name}>
+                <Link
+                  to={item.href}
+                  className={cn(
+                    navigationMenuTriggerStyle(),
+                    location.pathname === item.href && "bg-accent text-accent-foreground",
+                    "h-10"
+                  )}
+                >
+                  <span className="flex items-center">
+                    {item.icon}
+                    {item.name}
+                  </span>
+                </Link>
+              </NavigationMenuItem>
+            )
+          )}
+        </NavigationMenuList>
+      </NavigationMenu>
     </nav>
   );
 };
