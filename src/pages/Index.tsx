@@ -12,7 +12,7 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <main className="flex-grow">
-        {/* Banner Section */}
+        {/* Simple Banner Section - No Carousel */}
         <Banner />
         
         {/* Featured News Carousel with Latest News */}
