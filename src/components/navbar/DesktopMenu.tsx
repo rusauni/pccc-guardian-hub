@@ -21,11 +21,21 @@ interface DesktopMenuProps {
 const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
   const location = useLocation();
 
+  // Filter out duplicate items by checking for items with the same name
+  const uniqueNavigation = navigation.reduce<NavItem[]>((acc, current) => {
+    const x = acc.find(item => item.name === current.name);
+    if (!x) {
+      return acc.concat([current]);
+    } else {
+      return acc;
+    }
+  }, []);
+
   return (
     <nav className="hidden lg:flex flex-1 space-x-1">
       <NavigationMenu>
         <NavigationMenuList className="space-x-1">
-          {navigation.map((item, index) => 
+          {uniqueNavigation.map((item, index) => 
             item.submenu ? (
               <NavigationMenuItem key={item.name}>
                 <NavigationMenuTrigger className="h-10">
