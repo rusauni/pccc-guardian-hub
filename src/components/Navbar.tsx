@@ -2,16 +2,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
-import { 
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle
-} from "@/components/ui/navigation-menu";
 import { cn } from '@/lib/utils';
+import { buttonVariants } from './ui/button';
 
 const navigation = [
   { name: 'Trang chủ', href: '/' },
@@ -29,93 +21,89 @@ const Navbar = () => {
   const location = useLocation();
 
   return (
-    <header className="bg-white shadow sticky top-0 z-50">
-      <nav className="container mx-auto px-4 flex items-center justify-between py-4">
-        <div className="flex lg:flex-1">
-          <Link to="/" className="flex items-center">
-            <img 
-              src="/placeholder.svg" 
-              alt="PCCC Logo" 
-              className="h-10 w-10" 
-            />
-            <span className="ml-2 text-xl font-bold text-pccc-primary">PCCC News</span>
-          </Link>
-        </div>
+    <header className="sticky top-0 z-40 w-full border-b bg-background">
+      <div className="container flex h-16 items-center">
+        <Link to="/" className="flex items-center space-x-2">
+          <img 
+            src="/placeholder.svg" 
+            alt="PCCC Logo" 
+            className="h-8 w-8" 
+          />
+          <span className="font-bold inline-block">PCCC News</span>
+        </Link>
         
-        <div className="hidden lg:block">
-          <NavigationMenu>
-            <NavigationMenuList>
-              {navigation.map((item) => (
-                <NavigationMenuItem key={item.name}>
-                  <Link to={item.href}>
-                    <NavigationMenuLink 
-                      className={cn(
-                        navigationMenuTriggerStyle(),
-                        location.pathname === item.href || 
-                        (item.href !== '/' && location.pathname.startsWith(item.href)) 
-                          ? "bg-pccc-light text-pccc-primary" 
-                          : "text-gray-700 hover:text-pccc-primary"
-                      )}
-                    >
-                      {item.name}
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-              ))}
-            </NavigationMenuList>
-          </NavigationMenu>
-        </div>
+        <nav className="hidden md:flex flex-1 items-center justify-center space-x-1">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={cn(
+                "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                location.pathname === item.href || 
+                (item.href !== '/' && location.pathname.startsWith(item.href)) 
+                  ? "text-primary bg-accent" 
+                  : "text-foreground/60 hover:text-foreground/80 hover:bg-accent/50"
+              )}
+            >
+              {item.name}
+            </Link>
+          ))}
+        </nav>
         
-        <div className="flex lg:hidden">
+        <div className="flex items-center justify-end space-x-2 md:hidden">
           <button
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className={buttonVariants({
+              variant: "ghost",
+              size: "icon"
+            })}
             onClick={() => setMobileMenuOpen(true)}
           >
-            <Menu className="h-6 w-6" aria-hidden="true" />
+            <Menu className="h-5 w-5" aria-hidden="true" />
+            <span className="sr-only">Open menu</span>
           </button>
         </div>
-      </nav>
+      </div>
       
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-white">
+        <div className="fixed inset-0 z-50 bg-background">
           <div className="fixed inset-0 flex">
             <div className="w-full">
-              <div className="flex items-center justify-between p-4">
-                <Link to="/" className="flex items-center">
-                  <img src="/placeholder.svg" alt="PCCC Logo" className="h-10 w-10" />
-                  <span className="ml-2 text-xl font-bold text-pccc-primary">PCCC News</span>
+              <div className="flex items-center justify-between p-4 border-b">
+                <Link to="/" className="flex items-center space-x-2" onClick={() => setMobileMenuOpen(false)}>
+                  <img src="/placeholder.svg" alt="PCCC Logo" className="h-8 w-8" />
+                  <span className="font-bold inline-block">PCCC News</span>
                 </Link>
                 <button
                   type="button"
-                  className="rounded-md p-2.5 text-gray-700"
+                  className={buttonVariants({
+                    variant: "ghost",
+                    size: "icon"
+                  })}
                   onClick={() => setMobileMenuOpen(false)}
                 >
-                  <X className="h-6 w-6" aria-hidden="true" />
+                  <X className="h-5 w-5" aria-hidden="true" />
+                  <span className="sr-only">Close menu</span>
                 </button>
               </div>
-              <div className="mt-6 flow-root">
-                <div className="divide-y divide-gray-200">
-                  <div className="space-y-2 py-6 px-4">
-                    {navigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={cn(
-                          "block py-2 font-semibold transition duration-300",
-                          location.pathname === item.href || 
-                          (item.href !== '/' && location.pathname.startsWith(item.href))
-                            ? "text-pccc-primary"
-                            : "text-gray-900 hover:text-pccc-primary"
-                        )}
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    ))}
-                  </div>
-                </div>
+              <div className="mt-2 p-4 space-y-1">
+                {navigation.map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className={cn(
+                      "block px-3 py-2 text-base font-medium rounded-md transition-colors",
+                      location.pathname === item.href || 
+                      (item.href !== '/' && location.pathname.startsWith(item.href))
+                        ? "text-primary bg-accent" 
+                        : "text-foreground/60 hover:text-foreground/80 hover:bg-accent/50"
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.name}
+                  </Link>
+                ))}
               </div>
             </div>
           </div>

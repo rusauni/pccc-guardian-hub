@@ -21,18 +21,19 @@ const SearchBar = () => {
   };
 
   return (
-    <div className="bg-pccc-light py-2">
-      <div className="container mx-auto px-4">
-        <form onSubmit={handleSearch} className="flex gap-2 max-w-2xl mx-auto">
+    <div className="w-full border-b bg-muted/40">
+      <div className="container py-4">
+        <form onSubmit={handleSearch} className="flex w-full max-w-sm items-center space-x-2 mx-auto">
           <Input
             type="search"
-            placeholder="Tra cứu văn bản pháp luật về PCCC..."
+            placeholder="Tra cứu văn bản pháp luật..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="flex-1"
+            className="h-9"
           />
-          <Button type="submit" variant="default" size="sm" className="whitespace-nowrap">
-            <Search className="mr-2 h-4 w-4" /> Tìm kiếm
+          <Button type="submit" size="sm">
+            <Search className="h-4 w-4 mr-2" />
+            Tìm kiếm
           </Button>
         </form>
       </div>
