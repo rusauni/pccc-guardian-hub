@@ -48,7 +48,7 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
                   </span>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[220px] gap-1 p-2 bg-popover">
+                  <ul className="grid w-[220px] gap-1 p-2 bg-popover rounded-md">
                     {item.submenu.map((subItem) => (
                       <li key={subItem.name}>
                         <NavigationMenuLink asChild>
