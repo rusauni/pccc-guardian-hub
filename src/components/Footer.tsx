@@ -1,0 +1,55 @@
+
+import { Link } from "react-router-dom";
+
+const Footer = () => {
+  return (
+    <footer className="bg-pccc-dark text-white py-10">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div>
+            <h3 className="text-xl font-bold mb-4">PCCC News</h3>
+            <p className="text-sm">
+              Cổng thông tin điện tử về phòng cháy chữa cháy, cung cấp tin tức, kiến thức và văn bản pháp luật mới nhất.
+            </p>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Liên kết nhanh</h3>
+            <ul className="space-y-2">
+              <li><Link to="/" className="text-gray-300 hover:text-white text-sm">Trang chủ</Link></li>
+              <li><Link to="/tin-tuc" className="text-gray-300 hover:text-white text-sm">Tin tức PCCC</Link></li>
+              <li><Link to="/huong-dan-cong-dong" className="text-gray-300 hover:text-white text-sm">Hướng dẫn cộng đồng</Link></li>
+              <li><Link to="/van-ban-phap-quy" className="text-gray-300 hover:text-white text-sm">Văn bản pháp quy</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Thông tin hữu ích</h3>
+            <ul className="space-y-2">
+              <li><Link to="/thu-tuc-hanh-chinh" className="text-gray-300 hover:text-white text-sm">Thủ tục hành chính</Link></li>
+              <li><Link to="/huong-dan-nghiep-vu" className="text-gray-300 hover:text-white text-sm">Hướng dẫn nghiệp vụ</Link></li>
+              <li><Link to="/nghien-cuu-trao-doi" className="text-gray-300 hover:text-white text-sm">Nghiên cứu - Trao đổi</Link></li>
+              <li><Link to="/video" className="text-gray-300 hover:text-white text-sm">Video kỹ năng PCCC</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4">Liên hệ</h3>
+            <address className="not-italic text-sm text-gray-300">
+              <p>Số 2 Phùng Hưng, Hoàn Kiếm</p>
+              <p>Hà Nội, Việt Nam</p>
+              <p className="mt-2">Email: info@pcccnews.vn</p>
+              <p>Điện thoại: (024) 3636 3636</p>
+            </address>
+          </div>
+        </div>
+        
+        <div className="border-t border-gray-700 mt-8 pt-8 text-center text-sm text-gray-400">
+          <p>&copy; {new Date().getFullYear()} PCCC News. Tất cả quyền được bảo lưu.</p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
