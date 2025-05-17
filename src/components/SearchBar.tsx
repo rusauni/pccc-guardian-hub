@@ -10,6 +10,7 @@ import {
   CommandItem, 
   CommandList 
 } from "@/components/ui/command";
+import { Button } from "@/components/ui/button";
 import { DialogTitle } from "@/components/ui/dialog";
 
 const SearchBar = () => {
@@ -39,44 +40,61 @@ const SearchBar = () => {
   };
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} aria-describedby="search-description">
-      <DialogTitle className="sr-only">Tìm kiếm văn bản</DialogTitle>
-      <CommandInput placeholder="Nhập từ khóa tìm kiếm văn bản..." />
-      <CommandList>
-        <CommandEmpty>Không tìm thấy văn bản pháp luật.</CommandEmpty>
-        <CommandGroup heading="Văn bản gần đây">
-          <CommandItem onSelect={() => handleSearch("Nghị định 136/2020/NĐ-CP")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Nghị định 136/2020/NĐ-CP</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSearch("Luật PCCC 2001")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Luật Phòng cháy và chữa cháy 2001</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSearch("Thông tư 149/2020/TT-BCA")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Thông tư 149/2020/TT-BCA</span>
-          </CommandItem>
-        </CommandGroup>
-        <CommandGroup heading="Danh mục">
-          <CommandItem onSelect={() => handleSearch("Luật")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Luật</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSearch("Nghị định")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Nghị định</span>
-          </CommandItem>
-          <CommandItem onSelect={() => handleSearch("Thông tư")}>
-            <FileText className="mr-2 h-4 w-4" />
-            <span>Thông tư</span>
-          </CommandItem>
-        </CommandGroup>
-      </CommandList>
-      <span id="search-description" className="sr-only">
-        Nhập từ khóa để tìm kiếm văn bản pháp luật. Sử dụng phím mũi tên để di chuyển và Enter để chọn.
-      </span>
-    </CommandDialog>
+    <>
+      <Button 
+        variant="outline" 
+        size="default"
+        className="h-9 w-full justify-between relative bg-background border-none"
+        onClick={() => setOpen(true)}
+      >
+        <div className="flex items-center gap-2">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <span className="text-muted-foreground text-sm">Tìm kiếm tài liệu...</span>
+        </div>
+        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+          <span className="text-xs">⌘</span>K
+        </kbd>
+      </Button>
+      
+      <CommandDialog open={open} onOpenChange={setOpen} aria-describedby="search-description">
+        <DialogTitle className="sr-only">Tìm kiếm tài liệu</DialogTitle>
+        <CommandInput placeholder="Nhập từ khóa tìm kiếm tài liệu..." />
+        <CommandList>
+          <CommandEmpty>Không tìm thấy tài liệu.</CommandEmpty>
+          <CommandGroup heading="Văn bản gần đây">
+            <CommandItem onSelect={() => handleSearch("Nghị định 136/2020/NĐ-CP")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Nghị định 136/2020/NĐ-CP</span>
+            </CommandItem>
+            <CommandItem onSelect={() => handleSearch("Luật PCCC 2001")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Luật Phòng cháy và chữa cháy 2001</span>
+            </CommandItem>
+            <CommandItem onSelect={() => handleSearch("Thông tư 149/2020/TT-BCA")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Thông tư 149/2020/TT-BCA</span>
+            </CommandItem>
+          </CommandGroup>
+          <CommandGroup heading="Danh mục">
+            <CommandItem onSelect={() => handleSearch("Luật")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Luật</span>
+            </CommandItem>
+            <CommandItem onSelect={() => handleSearch("Nghị định")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Nghị định</span>
+            </CommandItem>
+            <CommandItem onSelect={() => handleSearch("Thông tư")}>
+              <FileText className="mr-2 h-4 w-4" />
+              <span>Thông tư</span>
+            </CommandItem>
+          </CommandGroup>
+        </CommandList>
+        <span id="search-description" className="sr-only">
+          Nhập từ khóa để tìm kiếm tài liệu. Sử dụng phím mũi tên để di chuyển và Enter để chọn.
+        </span>
+      </CommandDialog>
+    </>
   );
 };
 

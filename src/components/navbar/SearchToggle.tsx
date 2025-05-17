@@ -40,17 +40,19 @@ const SearchToggle = ({ isSearchIconOnly }: SearchToggleProps) => {
   return (
     <>
       <Button 
-        variant="ghost" 
-        size={isSearchIconOnly ? "icon" : "sm"}
-        className={isSearchIconOnly ? "h-9 w-9" : "h-9 px-3 justify-start text-left flex gap-2 w-64 relative"}
+        variant="outline" 
+        size={isSearchIconOnly ? "icon" : "default"}
+        className={isSearchIconOnly ? "h-9 w-9" : "h-9 w-full justify-between relative bg-background border-none"}
         onClick={() => setOpen(true)}
       >
-        <Search className="h-4 w-4" />
+        <div className="flex items-center gap-2">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          {!isSearchIconOnly && (
+            <span className="text-muted-foreground text-sm">Tìm kiếm tài liệu...</span>
+          )}
+        </div>
         {!isSearchIconOnly && (
-          <span className="truncate text-sm">Tìm kiếm văn bản...</span>
-        )}
-        {!isSearchIconOnly && (
-          <kbd className="pointer-events-none absolute right-1.5 top-1.5 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+          <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
             <span className="text-xs">⌘</span>K
           </kbd>
         )}
