@@ -2,12 +2,14 @@
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import VideoCard from '@/components/VideoCard';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { videos } from '@/data/mockData';
 
 const VideoPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <Breadcrumbs />
       <main className="flex-grow py-10">
         <div className="container">
           <div className="flex items-center mb-8 space-x-3">

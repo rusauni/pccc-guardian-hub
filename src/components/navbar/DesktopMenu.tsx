@@ -47,13 +47,19 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
               <NavigationMenuItem key={item.name} className="relative">
                 <HoverCard openDelay={0} closeDelay={100}>
                   <HoverCardTrigger asChild>
-                    <div className={cn(
-                      navigationMenuTriggerStyle(),
-                      location.pathname === item.href && "bg-accent text-accent-foreground",
-                      "h-10 flex items-center cursor-pointer"
-                    )}>
-                      {item.icon}
-                      {item.name}
+                    <div className="flex items-center">
+                      {/* Make parent menu item clickable */}
+                      <Link 
+                        to={item.href} 
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          location.pathname === item.href && "bg-accent text-accent-foreground",
+                          "h-10 flex items-center"
+                        )}
+                      >
+                        {item.icon}
+                        {item.name}
+                      </Link>
                     </div>
                   </HoverCardTrigger>
                   <HoverCardContent 

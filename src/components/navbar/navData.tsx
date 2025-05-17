@@ -7,7 +7,7 @@ export const mainNavigation: NavItem[] = [
   { name: 'Tin tức PCCC', href: '/tin-tuc', icon: <Newspaper className="h-4 w-4 mr-2" /> },
   { 
     name: 'Hướng dẫn', 
-    href: '#',
+    href: '/huong-dan', // Changed from '#' to a valid URL
     icon: <Book className="h-4 w-4 mr-2" />,
     submenu: [
       { name: 'Hướng dẫn cộng đồng', href: '/huong-dan-cong-dong' },
@@ -17,7 +17,7 @@ export const mainNavigation: NavItem[] = [
   { name: 'Thủ tục hành chính', href: '/thu-tuc-hanh-chinh', icon: <Folder className="h-4 w-4 mr-2" /> },
   { 
     name: 'Tài liệu', 
-    href: '#',
+    href: '/tai-lieu', // Changed from '#' to a valid URL
     icon: <FileText className="h-4 w-4 mr-2" />,
     submenu: [
       { name: 'Văn bản pháp quy', href: '/van-ban-phap-quy' },

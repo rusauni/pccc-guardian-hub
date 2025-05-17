@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { 
   latestNews, 
   communityGuides, 
@@ -52,6 +53,7 @@ const NewsDetail = () => {
     return (
       <div className="min-h-screen flex flex-col">
         <Navbar />
+        <Breadcrumbs />
         <main className="flex-grow py-10">
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-2xl font-bold">Bài viết không tồn tại</h1>
@@ -68,6 +70,7 @@ const NewsDetail = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <Breadcrumbs />
       <main className="flex-grow py-10">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

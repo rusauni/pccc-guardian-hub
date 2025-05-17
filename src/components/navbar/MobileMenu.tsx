@@ -61,10 +61,20 @@ const MobileMenu = ({ isOpen, onClose, mainNavigation }: MobileMenuProps) => {
                 </Link>
               ) : (
                 <div key={item.name} className="space-y-1">
-                  <div className="flex items-center px-3 py-2 text-base font-medium rounded-md text-foreground">
+                  {/* Make parent menu item clickable */}
+                  <Link
+                    to={item.href}
+                    className={cn(
+                      "flex items-center px-3 py-2 text-base font-medium rounded-md transition-colors",
+                      location.pathname === item.href
+                        ? "text-primary bg-accent" 
+                        : "text-foreground/60 hover:text-foreground/80 hover:bg-accent/50"
+                    )}
+                    onClick={onClose}
+                  >
                     {item.icon}
                     {item.name}
-                  </div>
+                  </Link>
                   <div className="pl-8 space-y-1">
                     {item.submenu.map((subItem) => (
                       <Link

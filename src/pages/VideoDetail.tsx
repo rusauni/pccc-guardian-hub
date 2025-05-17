@@ -1,8 +1,12 @@
 
-import { useEffect, useState } from 'react';
+// We need to add breadcrumbs to VideoDetail as well
+
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import VideoCard from '@/components/VideoCard';
 import { videos } from '@/data/mockData';
 import VideoCard from '@/components/VideoCard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -48,6 +52,7 @@ const VideoDetail = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
+      <Breadcrumbs />
       <main className="flex-grow py-10">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
