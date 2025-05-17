@@ -12,6 +12,7 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu';
+import React from 'react';
 
 interface DesktopMenuProps {
   navigation: NavItem[];
@@ -24,7 +25,7 @@ const DesktopMenu = ({ navigation }: DesktopMenuProps) => {
     <nav className="hidden lg:flex flex-1 space-x-1">
       <NavigationMenu>
         <NavigationMenuList className="space-x-1">
-          {navigation.map((item) => 
+          {navigation.map((item, index) => 
             item.submenu ? (
               <NavigationMenuItem key={item.name}>
                 <NavigationMenuTrigger className="h-10">
