@@ -1,7 +1,7 @@
 
 import { ReactNode } from 'react';
 
-export interface SubMenuItem {
+export interface NavSubItem {
   name: string;
   href: string;
 }
@@ -9,6 +9,6 @@ export interface SubMenuItem {
 export interface NavItem {
   name: string;
   href: string;
-  icon: ReactNode;
-  submenu?: SubMenuItem[];
+  icon?: ReactNode;
+  submenu?: NavSubItem[];
 }
