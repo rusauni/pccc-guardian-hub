@@ -1,9 +1,9 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, ChevronDown, Home, Newspaper, Book, Folder, FileText, Video } from 'lucide-react';
+import { Menu, X, ChevronDown, Home, Newspaper, Book, Folder, FileText, Video, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { buttonVariants } from './ui/button';
+import { Button, buttonVariants } from './ui/button';
 import SearchBar from './SearchBar';
 import {
   NavigationMenu,
@@ -42,24 +42,43 @@ const mainNavigation = [
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isSearchIconOnly, setIsSearchIconOnly] = useState(false);
   const location = useLocation();
+  
+  useEffect(() => {
+    // Function to handle resize and determine if we should show search icon only
+    const handleResize = () => {
+      setIsSearchIconOnly(window.innerWidth < 1024);
+    };
+    
+    // Set initial state
+    handleResize();
+    
+    // Add event listener
+    window.addEventListener('resize', handleResize);
+    
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center justify-between">
-        <div className="flex items-center">
-          <Link to="/" className="flex items-center space-x-2 mr-4">
+      <div className="container flex h-16 items-center">
+        <div className="flex items-center flex-1">
+          <Link to="/" className="flex items-center space-x-2 mr-6">
             <img 
               src="/placeholder.svg" 
               alt="PCCC Logo" 
               className="h-8 w-8" 
             />
-            <span className="font-bold inline-block">PCCC News</span>
+            <span className="font-bold hidden sm:inline-block">PCCC40</span>
           </Link>
           
-          <nav className="hidden md:flex space-x-1">
+          <nav className="hidden lg:flex flex-1 space-x-1">
             <NavigationMenu>
-              <NavigationMenuList>
+              <NavigationMenuList className="space-x-1">
                 {mainNavigation.map((item) => 
                   item.submenu ? (
                     <NavigationMenuItem key={item.name}>
@@ -70,7 +89,7 @@ const Navbar = () => {
                         </span>
                       </NavigationMenuTrigger>
                       <NavigationMenuContent>
-                        <ul className="grid w-[200px] gap-1 p-2">
+                        <ul className="grid w-[220px] gap-1 p-2">
                           {item.submenu.map((subItem) => (
                             <li key={subItem.name}>
                               <NavigationMenuLink asChild>
@@ -112,24 +131,33 @@ const Navbar = () => {
           </nav>
         </div>
         
-        <div className="hidden md:flex items-center">
-          <div className="w-64">
-            <SearchBar />
+        <div className="ml-auto flex items-center space-x-2">
+          {isSearchIconOnly ? (
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="h-9 w-9"
+              onClick={() => document.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', ctrlKey: true }))}
+            >
+              <Search className="h-5 w-5" />
+              <span className="sr-only">Tìm kiếm</span>
+            </Button>
+          ) : (
+            <div className="w-64">
+              <SearchBar />
+            </div>
+          )}
+          
+          <div className="flex lg:hidden">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <Menu className="h-5 w-5" aria-hidden="true" />
+              <span className="sr-only">Open menu</span>
+            </Button>
           </div>
-        </div>
-        
-        <div className="flex items-center md:hidden">
-          <button
-            type="button"
-            className={buttonVariants({
-              variant: "ghost",
-              size: "icon"
-            })}
-            onClick={() => setMobileMenuOpen(true)}
-          >
-            <Menu className="h-5 w-5" aria-hidden="true" />
-            <span className="sr-only">Open menu</span>
-          </button>
         </div>
       </div>
       
@@ -141,19 +169,16 @@ const Navbar = () => {
               <div className="flex items-center justify-between p-4 border-b">
                 <Link to="/" className="flex items-center space-x-2" onClick={() => setMobileMenuOpen(false)}>
                   <img src="/placeholder.svg" alt="PCCC Logo" className="h-8 w-8" />
-                  <span className="font-bold inline-block">PCCC News</span>
+                  <span className="font-bold inline-block">PCCC40</span>
                 </Link>
-                <button
-                  type="button"
-                  className={buttonVariants({
-                    variant: "ghost",
-                    size: "icon"
-                  })}
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   <X className="h-5 w-5" aria-hidden="true" />
                   <span className="sr-only">Close menu</span>
-                </button>
+                </Button>
               </div>
               
               {/* Search bar in mobile menu */}

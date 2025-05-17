@@ -46,7 +46,7 @@ const SearchBar = () => {
       >
         <Search className="h-4 w-4 opacity-50" />
         <span className="text-muted-foreground">Tra cứu văn bản...</span>
-        <kbd className="ml-auto pointer-events-none hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs opacity-50 sm:flex">
+        <kbd className="ml-auto pointer-events-none hidden select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs opacity-50 md:flex">
           <span>⌘</span>K
         </kbd>
       </button>
