@@ -1,12 +1,13 @@
+
 import { useState, useEffect } from 'react';
 import { Search, FileText } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast";
 import { CommandDialog, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
+
 const SearchBar = () => {
   const [open, setOpen] = useState(false);
-  const {
-    toast
-  } = useToast();
+  const { toast } = useToast();
+
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -17,6 +18,7 @@ const SearchBar = () => {
     document.addEventListener("keydown", down);
     return () => document.removeEventListener("keydown", down);
   }, []);
+
   const handleSearch = (value: string) => {
     if (value.trim()) {
       toast({
@@ -27,9 +29,8 @@ const SearchBar = () => {
     }
     setOpen(false);
   };
+
   return <>
-      
-      
       <CommandDialog open={open} onOpenChange={setOpen}>
         <CommandInput placeholder="Nhập từ khóa tìm kiếm văn bản..." />
         <CommandList>
@@ -66,4 +67,5 @@ const SearchBar = () => {
       </CommandDialog>
     </>;
 };
+
 export default SearchBar;
