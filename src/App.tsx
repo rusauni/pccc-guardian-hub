@@ -17,6 +17,7 @@ import ProceduresPage from "./pages/ProceduresPage";
 import NewsPage from "./pages/NewsPage";
 import CommunityGuidelinesPage from "./pages/CommunityGuidelinesPage";
 import ProfessionalSkillsPage from "./pages/ProfessionalSkillsPage";
+import { TestEditor } from "./pages/TestEditor";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -50,6 +51,7 @@ const App = () => {
               <Route path="/auth" element={<AuthDemo />} />
               <Route path="/:category/:id" element={<NewsDetail />} />
               <Route path="/video/:id" element={<VideoDetail />} />
+              <Route path="/test-editor" element={<TestEditor />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

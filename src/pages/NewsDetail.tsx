@@ -14,6 +14,7 @@ import {
 import NewsCard, { NewsItem } from '@/components/NewsCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { EditorContent } from '@/components/EditorContent/EditorContent';
 
 const allNews = [
   ...latestNews,
@@ -28,6 +29,7 @@ const NewsDetail = () => {
   const { category, id } = useParams<{ category: string; id: string }>();
   const [article, setArticle] = useState<NewsItem | null>(null);
   const [relatedNews, setRelatedNews] = useState<NewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   
   // Format date
   const formatDate = (dateString: string) => {
@@ -36,26 +38,84 @@ const NewsDetail = () => {
   };
   
   useEffect(() => {
-    // Find the current article by matching the slug with the route parameter
-    const currentArticle = allNews.find(item => 
-      item.slug === id && item.category.slug === category
-    );
-    
-    if (currentArticle) {
-      setArticle(currentArticle);
-      
-      // Find related news from the same category
-      const related = allNews
-        .filter(item => 
-          item.category.slug === currentArticle.category.slug && 
-          item.id !== currentArticle.id
-        )
-        .slice(0, 3);
-        
-      setRelatedNews(related);
-    }
+    const fetchArticle = async () => {
+      try {
+        setIsLoading(true);
+        // First try to find in mock data
+        const currentArticle = allNews.find(item => 
+          item.slug === id && item.category.slug === category
+        );
+
+        if (currentArticle) {
+          setArticle(currentArticle);
+          
+          // Find related news from the same category
+          const related = allNews
+            .filter(item => 
+              item.category.slug === currentArticle.category.slug && 
+              item.id !== currentArticle.id
+            )
+            .slice(0, 3);
+            
+          setRelatedNews(related);
+        } else {
+          // If not found in mock data, try to fetch from API
+          const response = await fetch(
+            `https://dashboard.pccc40.com/items/articles?filter[slug][_eq]=${id}&fields=*,category.name,category.slug,category.id`
+          );
+          
+          if (response.ok) {
+            const data = await response.json();
+            if (data.data && data.data.length > 0) {
+              const articleData = data.data[0];
+              // Transform API data to match our NewsItem type
+              const formattedArticle: NewsItem = {
+                ...articleData,
+                thumbnailUrl: `https://dashboard.pccc40.com/assets/${articleData.thumbnail}`,
+                date_updated: articleData.date_updated || new Date().toISOString(),
+                category: articleData.category || { id: 0, name: 'Tin tức', slug: 'tin-tuc' }
+              };
+              setArticle(formattedArticle);
+              
+              // For related articles, we might want to fetch them separately
+              // For now, we'll just use an empty array
+              setRelatedNews([]);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching article:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchArticle();
   }, [category, id]);
   
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-grow py-10">
+          <div className="container mx-auto px-4">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-96 bg-gray-200 rounded"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   if (!article) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -98,47 +158,47 @@ const NewsDetail = () => {
                     <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
                     
                     <div className="prose max-w-none">
-                      <p className="text-lg mb-6">
-                        {article.summary}
-                      </p>
-                      
-                      <p className="mb-4">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis justo ut massa vestibulum, 
-                        non convallis eros mattis. Nulla facilisi. Donec sagittis sapien ac elit ultrices, 
-                        a sodales dui lacinia. Suspendisse potenti. Pellentesque et tortor turpis. 
-                        Fusce vitae tempor odio, eget facilisis eros. Integer sit amet sodales neque, 
-                        sit amet interdum diam. Praesent ut tempus ante.
-                      </p>
-                      
-                      <h2 className="text-xl font-bold my-4">Các biện pháp an toàn PCCC</h2>
-                      
-                      <p className="mb-4">
-                        Cras commodo posuere massa, vitae fringilla nulla vehicula ac. 
-                        Donec ipsum velit, aliquam nec iaculis at, sodales vel eros. 
-                        Morbi fermentum, lacus sit amet aliquam interdum, lacus risus interdum felis, 
-                        sed faucibus nulla risus eget nulla.
-                      </p>
-                      
-                      <ul className="list-disc pl-5 mb-4">
-                        <li className="mb-2">Kiểm tra hệ thống PCCC định kỳ</li>
-                        <li className="mb-2">Lắp đặt thiết bị báo cháy</li>
-                        <li className="mb-2">Sử dụng vật liệu chống cháy</li>
-                        <li className="mb-2">Tập huấn kỹ năng PCCC cho cư dân</li>
-                      </ul>
-                      
-                      <p className="mb-4">
-                        Vivamus hendrerit varius arcu, eget ultricies magna rutrum sed. 
-                        Nulla facilisi. Aliquam erat volutpat. Pellentesque at feugiat mauris. 
-                        Maecenas tempus nisi ut nulla lacinia, a porta lectus commodo. 
-                        Aliquam non magna vel lectus ultrices dapibus vel in justo.
-                      </p>
-                      
-                      <p className="mb-4">
-                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-                        Maecenas lorem nisi, ultrices id lacinia id, eleifend eget libero. 
-                        Sed facilisis, velit ac tempor volutpat, dolor arcu aliquam risus, 
-                        sed imperdiet orci ex vitae arcu.
-                      </p>
+                      {article.content ? (
+                        <EditorContent content={article.content} className="mt-6" />
+                      ) : (
+                        <>
+                          <p className="text-lg mb-6">
+                            {article.summary}
+                          </p>
+                          <p className="mb-6">
+                            Nội dung chi tiết sẽ được cập nhật sớm nhất.
+                          </p>
+                          <h2 className="text-xl font-bold my-4">Các biện pháp an toàn PCCC</h2>
+                          
+                          <p className="mb-4">
+                            Cras commodo posuere massa, vitae fringilla nulla vehicula ac. 
+                            Donec ipsum velit, aliquam nec iaculis at, sodales vel eros. 
+                            Morbi fermentum, lacus sit amet aliquam interdum, lacus risus interdum felis, 
+                            sed faucibus nulla risus eget nulla.
+                          </p>
+                          
+                          <ul className="list-disc pl-5 mb-4">
+                            <li className="mb-2">Kiểm tra hệ thống PCCC định kỳ</li>
+                            <li className="mb-2">Lắp đặt thiết bị báo cháy</li>
+                            <li className="mb-2">Sử dụng vật liệu chống cháy</li>
+                            <li className="mb-2">Tập huấn kỹ năng PCCC cho cư dân</li>
+                          </ul>
+                          
+                          <p className="mb-4">
+                            Vivamus hendrerit varius arcu, eget ultricies magna rutrum sed. 
+                            Nulla facilisi. Aliquam erat volutpat. Pellentesque at feugiat mauris. 
+                            Maecenas tempus nisi ut nulla lacinia, a porta lectus commodo. 
+                            Aliquam non magna vel lectus ultrices dapibus vel in justo.
+                          </p>
+                          
+                          <p className="mb-4">
+                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+                            Maecenas lorem nisi, ultrices id lacinia id, eleifend eget libero. 
+                            Sed facilisis, velit ac tempor volutpat, dolor arcu aliquam risus, 
+                            sed imperdiet orci ex vitae arcu.
+                          </p>
+                        </>
+                      )}
                     </div>
                   </div>
                 </CardContent>

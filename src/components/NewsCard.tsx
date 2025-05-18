@@ -30,6 +30,7 @@ export interface NewsItem {
   thumbnailUrl: string;
   summary: string;
   date_updated: string;
+  content?: any; // EditorJS content
   category: {
     name: string;
     slug: string;
