@@ -38,7 +38,7 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/tin-tuc" element={<NewsPage />} />
+              <Route path="/tin-tuc-pccc" element={<NewsPage />} />
               <Route path="/huong-dan" element={<GuidelinesPage />} />
               <Route path="/huong-dan-cong-dong" element={<CommunityGuidelinesPage />} />
               <Route path="/huong-dan-nghiep-vu" element={<ProfessionalSkillsPage />} />

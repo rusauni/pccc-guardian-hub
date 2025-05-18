@@ -4,7 +4,7 @@ import { NavItem } from './types';
 
 export const mainNavigation: NavItem[] = [
   { name: 'Trang chủ', href: '/', icon: <Home className="h-4 w-4 mr-2" /> },
-  { name: 'Tin tức PCCC', href: '/tin-tuc', icon: <Newspaper className="h-4 w-4 mr-2" /> },
+  { name: 'Tin tức PCCC', href: '/tin-tuc-pccc', icon: <Newspaper className="h-4 w-4 mr-2" /> },
   { 
     name: 'Hướng dẫn', 
     href: '/huong-dan', // Changed from '#' to a valid URL
