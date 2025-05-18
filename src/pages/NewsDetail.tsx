@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
@@ -12,7 +11,7 @@ import {
   professionalGuides, 
   research 
 } from '@/data/mockData';
-import NewsCard from '@/components/NewsCard';
+import NewsCard, { NewsItem } from '@/components/NewsCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -27,12 +26,20 @@ const allNews = [
 
 const NewsDetail = () => {
   const { category, id } = useParams<{ category: string; id: string }>();
-  const [article, setArticle] = useState<any>(null);
-  const [relatedNews, setRelatedNews] = useState<any[]>([]);
+  const [article, setArticle] = useState<NewsItem | null>(null);
+  const [relatedNews, setRelatedNews] = useState<NewsItem[]>([]);
+  
+  // Format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
   
   useEffect(() => {
-    // Find the current article
-    const currentArticle = allNews.find(item => item.slug === `/${category}/${id}`);
+    // Find the current article by matching the slug with the route parameter
+    const currentArticle = allNews.find(item => 
+      item.slug === id && item.category.slug === category
+    );
     
     if (currentArticle) {
       setArticle(currentArticle);
@@ -40,7 +47,7 @@ const NewsDetail = () => {
       // Find related news from the same category
       const related = allNews
         .filter(item => 
-          item.category === currentArticle.category && 
+          item.category.slug === currentArticle.category.slug && 
           item.id !== currentArticle.id
         )
         .slice(0, 3);
@@ -79,55 +86,58 @@ const NewsDetail = () => {
               <Card className="overflow-hidden">
                 <CardContent className="p-0">
                   <img 
-                    src={article.image} 
+                    src={article.thumbnailUrl} 
                     alt={article.title} 
                     className="w-full h-[400px] object-cover"
                   />
                   <div className="p-6">
                     <div className="flex justify-between items-center mb-4">
-                      <Badge variant="secondary">{article.category}</Badge>
-                      <span className="text-sm text-gray-500">{article.date}</span>
+                      <Badge variant="secondary">{article.category.name}</Badge>
+                      <span className="text-sm text-gray-500">{formatDate(article.date_updated)}</span>
                     </div>
                     <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
                     
                     <div className="prose max-w-none">
-                      <p className="mb-4">
-                        {article.excerpt} Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                        Nulla facilisi. Sed sit amet metus vel nisi fermentum facilisis. 
-                        Proin varius libero ac mi commodo, at fringilla nibh tristique. 
-                        Nam ut tristique mauris, vel tristique est.
+                      <p className="text-lg mb-6">
+                        {article.summary}
                       </p>
                       
                       <p className="mb-4">
-                        Morbi fermentum, lectus vel vehicula facilisis, tellus lectus finibus tortor, 
-                        at commodo sem sem sed ligula. Praesent libero ligula, congue et feugiat at, 
-                        scelerisque in ipsum. Vivamus ultricies orci est, eu finibus turpis pulvinar id. 
-                        Donec lobortis nunc ac augue cursus, eget faucibus nisi tempor.
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis justo ut massa vestibulum, 
+                        non convallis eros mattis. Nulla facilisi. Donec sagittis sapien ac elit ultrices, 
+                        a sodales dui lacinia. Suspendisse potenti. Pellentesque et tortor turpis. 
+                        Fusce vitae tempor odio, eget facilisis eros. Integer sit amet sodales neque, 
+                        sit amet interdum diam. Praesent ut tempus ante.
                       </p>
                       
-                      <h2 className="text-xl font-bold mt-6 mb-4">Nguyên nhân và giải pháp</h2>
+                      <h2 className="text-xl font-bold my-4">Các biện pháp an toàn PCCC</h2>
                       
                       <p className="mb-4">
-                        Phasellus ullamcorper, nisl id tincidunt sagittis, felis ipsum finibus nisi, 
-                        ut tincidunt nulla turpis vel neque. Vestibulum tempus lorem in ligula tempor dictum. 
-                        Phasellus maximus elit vitae nisi tempor, eu ultricies mauris convallis. 
-                        Quisque tempor metus eu est dictum, eu porta nunc dapibus.
+                        Cras commodo posuere massa, vitae fringilla nulla vehicula ac. 
+                        Donec ipsum velit, aliquam nec iaculis at, sodales vel eros. 
+                        Morbi fermentum, lacus sit amet aliquam interdum, lacus risus interdum felis, 
+                        sed faucibus nulla risus eget nulla.
+                      </p>
+                      
+                      <ul className="list-disc pl-5 mb-4">
+                        <li className="mb-2">Kiểm tra hệ thống PCCC định kỳ</li>
+                        <li className="mb-2">Lắp đặt thiết bị báo cháy</li>
+                        <li className="mb-2">Sử dụng vật liệu chống cháy</li>
+                        <li className="mb-2">Tập huấn kỹ năng PCCC cho cư dân</li>
+                      </ul>
+                      
+                      <p className="mb-4">
+                        Vivamus hendrerit varius arcu, eget ultricies magna rutrum sed. 
+                        Nulla facilisi. Aliquam erat volutpat. Pellentesque at feugiat mauris. 
+                        Maecenas tempus nisi ut nulla lacinia, a porta lectus commodo. 
+                        Aliquam non magna vel lectus ultrices dapibus vel in justo.
                       </p>
                       
                       <p className="mb-4">
-                        Nullam fermentum consectetur risus, in faucibus nisl semper vitae. 
-                        Suspendisse vestibulum ipsum at tempor tempus. Phasellus sit amet accumsan quam. 
-                        Mauris congue fringilla turpis in ultrices. Morbi vehicula sapien ut elit pharetra, 
-                        sit amet interdum ipsum bibendum.
-                      </p>
-                      
-                      <h2 className="text-xl font-bold mt-6 mb-4">Kết luận</h2>
-                      
-                      <p className="mb-4">
-                        Aliquam porttitor, diam ut consectetur ullamcorper, tellus diam dignissim ipsum, 
-                        non consequat nisl neque at diam. Suspendisse volutpat, felis quis lacinia fringilla, 
-                        augue nulla ultrices arcu, ac convallis nisl leo in nisi. 
-                        Morbi tristique diam id ex interdum, sit amet ultricies nulla dignissim.
+                        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
+                        Maecenas lorem nisi, ultrices id lacinia id, eleifend eget libero. 
+                        Sed facilisis, velit ac tempor volutpat, dolor arcu aliquam risus, 
+                        sed imperdiet orci ex vitae arcu.
                       </p>
                     </div>
                   </div>
@@ -137,21 +147,33 @@ const NewsDetail = () => {
             
             {/* Sidebar */}
             <div>
-              <div className="mb-8">
-                <h3 className="text-xl font-bold mb-4">Bài viết liên quan</h3>
-                <div className="space-y-4">
-                  {relatedNews.map((news) => (
-                    <NewsCard key={news.id} news={news} />
-                  ))}
-                </div>
-              </div>
+              <Card className="mb-6">
+                <CardContent className="p-4">
+                  <h3 className="text-xl font-bold mb-4">Bài viết liên quan</h3>
+                  <div className="space-y-4">
+                    {relatedNews.map(newsItem => (
+                      <div key={newsItem.id} className="border-b pb-4 last:border-0">
+                        <h4 className="font-semibold mb-1">
+                          <Link 
+                            to={`/${newsItem.category.slug}/${newsItem.slug}`} 
+                            className="hover:text-pccc-primary"
+                          >
+                            {newsItem.title}
+                          </Link>
+                        </h4>
+                        <p className="text-sm text-gray-500">{formatDate(newsItem.date_updated)}</p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
               
               <Card>
                 <CardContent className="p-4">
-                  <h3 className="text-xl font-bold mb-4">Danh mục</h3>
+                  <h3 className="text-xl font-bold mb-4">Danh mục tin</h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link to="/tin-tuc" className="text-gray-700 hover:text-pccc-primary">Tin tức PCCC</Link>
+                      <Link to="/tin-tuc-pccc" className="text-gray-700 hover:text-pccc-primary">Tin tức PCCC</Link>
                     </li>
                     <li>
                       <Link to="/huong-dan-cong-dong" className="text-gray-700 hover:text-pccc-primary">Hướng dẫn cộng đồng</Link>
@@ -167,9 +189,6 @@ const NewsDetail = () => {
                     </li>
                     <li>
                       <Link to="/nghien-cuu-trao-doi" className="text-gray-700 hover:text-pccc-primary">Nghiên cứu - Trao đổi</Link>
-                    </li>
-                    <li>
-                      <Link to="/video" className="text-gray-700 hover:text-pccc-primary">Video kỹ năng PCCC</Link>
                     </li>
                   </ul>
                 </CardContent>

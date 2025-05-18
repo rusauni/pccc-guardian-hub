@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -13,6 +12,11 @@ import NewsDetail from "./pages/NewsDetail";
 import VideoDetail from "./pages/VideoDetail";
 import NotFound from "./pages/NotFound";
 import AuthDemo from "./pages/AuthDemo";
+import GuidelinesPage from "./pages/GuidelinesPage";
+import ProceduresPage from "./pages/ProceduresPage";
+import NewsPage from "./pages/NewsPage";
+import CommunityGuidelinesPage from "./pages/CommunityGuidelinesPage";
+import ProfessionalSkillsPage from "./pages/ProfessionalSkillsPage";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -34,11 +38,11 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
-              <Route path="/tin-tuc" element={<NewsCategory />} />
-              <Route path="/huong-dan" element={<NewsCategory />} />
-              <Route path="/huong-dan-cong-dong" element={<NewsCategory />} />
-              <Route path="/huong-dan-nghiep-vu" element={<NewsCategory />} />
-              <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
+              <Route path="/tin-tuc" element={<NewsPage />} />
+              <Route path="/huong-dan" element={<GuidelinesPage />} />
+              <Route path="/huong-dan-cong-dong" element={<CommunityGuidelinesPage />} />
+              <Route path="/huong-dan-nghiep-vu" element={<ProfessionalSkillsPage />} />
+              <Route path="/thu-tuc-hanh-chinh" element={<ProceduresPage />} />
               <Route path="/tai-lieu" element={<NewsCategory />} />
               <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
               <Route path="/nghien-cuu-trao-doi" element={<NewsCategory />} />

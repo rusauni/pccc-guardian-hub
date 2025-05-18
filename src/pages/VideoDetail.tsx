@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -7,14 +7,35 @@ import VideoCard from '@/components/VideoCard';
 import { videos } from '@/data/mockData';
 import { Card, CardContent } from '@/components/ui/card';
 
+// Define VideoItem type to match with the interface in VideoCard component
+interface VideoItem {
+  id: number;
+  title: string;
+  thumbnail: string;
+  thumbnailUrl: string;
+  date_updated: string;
+  slug: string;
+  category: {
+    name: string;
+    slug: string;
+    id: number;
+  };
+}
+
 const VideoDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const [video, setVideo] = useState<any>(null);
-  const [relatedVideos, setRelatedVideos] = useState<any[]>([]);
+  const [video, setVideo] = useState<VideoItem | null>(null);
+  const [relatedVideos, setRelatedVideos] = useState<VideoItem[]>([]);
+  
+  // Format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
   
   useEffect(() => {
-    // Find the current video
-    const currentVideo = videos.find(item => item.slug === `/video/${id}`);
+    // Find the current video by slug
+    const currentVideo = videos.find(item => item.slug === id);
     
     if (currentVideo) {
       setVideo(currentVideo);
@@ -57,19 +78,16 @@ const VideoDetail = () => {
               <Card className="overflow-hidden">
                 <CardContent className="p-6">
                   <div className="aspect-video mb-4">
-                    <iframe 
-                      className="w-full h-full" 
-                      src={`https://www.youtube.com/embed/${video.youtubeId}`}
-                      title={video.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    ></iframe>
+                    <img 
+                      src={video.thumbnailUrl} 
+                      alt={video.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   
                   <div className="flex justify-between items-center mb-4">
                     <h1 className="text-2xl font-bold">{video.title}</h1>
-                    <span className="text-sm text-gray-500">{video.date}</span>
+                    <span className="text-sm text-gray-500">{formatDate(video.date_updated)}</span>
                   </div>
                   
                   <div className="prose max-w-none">
@@ -115,7 +133,7 @@ const VideoDetail = () => {
                   <h3 className="text-xl font-bold mb-4">Danh mục khác</h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link to="/tin-tuc" className="text-gray-700 hover:text-pccc-primary">Tin tức PCCC</Link>
+                      <Link to="/tin-tuc-pccc" className="text-gray-700 hover:text-pccc-primary">Tin tức PCCC</Link>
                     </li>
                     <li>
                       <Link to="/huong-dan-cong-dong" className="text-gray-700 hover:text-pccc-primary">Hướng dẫn cộng đồng</Link>

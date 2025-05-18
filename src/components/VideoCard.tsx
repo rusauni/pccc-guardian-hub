@@ -1,4 +1,3 @@
-
 import { Play } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
@@ -7,8 +6,14 @@ interface VideoItem {
   id: number;
   title: string;
   thumbnail: string;
-  date: string;
+  thumbnailUrl: string;
+  date_updated: string;
   slug: string;
+  category: {
+    name: string;
+    slug: string;
+    id: number;
+  };
 }
 
 interface VideoCardProps {
@@ -19,13 +24,19 @@ const VideoCard = ({ video }: VideoCardProps) => {
   // Sử dụng ảnh placeholder nếu thumbnail không tồn tại hoặc bị lỗi
   const fallbackImage = "https://via.placeholder.com/400x300?text=Video+Thumbnail";
   
+  // Format date
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
+  
   return (
-    <Card className="news-card h-full hover:shadow-md transition-shadow">
+    <Card className="overflow-hidden transition-colors hover:bg-accent/50">
       <CardContent className="p-0">
-        <Link to={video.slug}>
+        <Link to={`/video/${video.slug}`}>
           <div className="relative">
             <img
-              src={video.thumbnail || fallbackImage}
+              src={video.thumbnailUrl || fallbackImage}
               alt={video.title}
               className="w-full h-48 object-cover"
               onError={(e) => {
@@ -42,7 +53,7 @@ const VideoCard = ({ video }: VideoCardProps) => {
           </div>
           <div className="p-4">
             <h3 className="text-lg font-semibold line-clamp-2">{video.title}</h3>
-            <p className="text-sm text-gray-500 mt-2">{video.date}</p>
+            <p className="text-sm text-gray-500 mt-2">{formatDate(video.date_updated)}</p>
           </div>
         </Link>
       </CardContent>
