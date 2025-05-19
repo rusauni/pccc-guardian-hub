@@ -52,6 +52,7 @@ const App = () => {
               <Route path="/:category/:id" element={<NewsDetail />} />
               <Route path="/video/:id" element={<VideoDetail />} />
               <Route path="/test-editor" element={<TestEditor />} />
+              <Route path="/test-editor/:slug" element={<TestEditor />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

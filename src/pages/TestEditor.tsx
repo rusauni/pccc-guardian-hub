@@ -1,7 +1,29 @@
 import { EditorContent } from '@/components/EditorContent/EditorContent';
 import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getPostDetailBySlug } from '@/repository/GetPostDetailBySlug';
 
-// Sample data from the server API
+interface Article {
+  id: number;
+  title: string;
+  slug: string;
+  thumbnail: string;
+  thumbnailUrl: string;
+  summary: string;
+  date_updated: string;
+  content: {
+    time: number;
+    blocks: any[];
+    version: string;
+  };
+  category: {
+    name: string;
+    slug: string;
+    id: number;
+  };
+}
+
+// Sample data as fallback
 const sampleData = {
   "data": [
         {
@@ -315,39 +337,36 @@ interface Article {
 }
 
 export function TestEditor() {
+  const { slug = 'mot-so-giai-phap-de-bao-dam-giao-thong-phuc-vu-chua-chay' } = useParams();
   const [article, setArticle] = useState<Article | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Simulate API fetch
     const fetchData = async () => {
       try {
-        // In a real app, this would be an API call
-        // const response = await fetch('https://dashboard.pccc40.com/items/articles?filter[category][slug][_eq]=tin-tuc-pccc');
-        // const data = await response.json();
+        setIsLoading(true);
+        const data = await getPostDetailBySlug(slug);
         
-        // For now, use the sample data
-        const data = sampleData;
-        
-        if (data.data && data.data.length > 0) {
-          // Map thumbnail to include full URL
+        if (data) {
           const articleWithThumbnail = {
-            ...data.data[0],
-            thumbnailUrl: `https://dashboard.pccc40.com/assets/${data.data[0].thumbnail}`
+            ...data,
+            thumbnailUrl: data.thumbnail ? `https://dashboard.pccc40.com/assets/${data.thumbnail}` : ''
           };
           setArticle(articleWithThumbnail);
+        } else {
+          setError('Không tìm thấy bài viết');
         }
       } catch (err) {
         console.error('Error fetching article:', err);
-        setError('Không thể tải bài viết. Vui lòng thử lại sau.');
+        setError('Có lỗi xảy ra khi tải bài viết. Vui lòng thử lại sau.');
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, []);
+  }, [slug]);
 
   if (isLoading) {
     return (
@@ -389,35 +408,10 @@ export function TestEditor() {
   });
 
   return (
-    <div className="container mx-auto p-4 max-w-4xl">
-      <h1 className="text-3xl font-bold mb-6 text-center">Xem trước nội dung</h1>
-      
-      <article className="bg-white rounded-lg shadow-md p-6">
-        <header className="mb-6">
-          <h2 className="text-2xl font-semibold mb-2">{article.title}</h2>
-          <div className="flex items-center text-sm text-gray-500 mb-4">
-            <span>Ngày đăng: {formattedDate}</span>
-            <span className="mx-2">•</span>
-            <span>Danh mục: {article.category.name}</span>
-          </div>
-          {article.thumbnail && (
-            <img 
-              src={article.thumbnailUrl} 
-              alt={article.title} 
-              className="w-full h-auto rounded-lg mb-6"
-            />
-          )}
-          {article.summary && (
-            <p className="text-lg font-medium text-gray-700 mb-6">
-              {article.summary}
-            </p>
-          )}
-        </header>
-        
-        <div className="prose max-w-none">
-          <EditorContent content={article.content} />
-        </div>
-      </article>
+    <div className="container mx-auto max-w-4xl">
+      <div className="prose max-w-none">
+        <EditorContent content={article.content} />
+      </div>
     </div>
   );
 }
