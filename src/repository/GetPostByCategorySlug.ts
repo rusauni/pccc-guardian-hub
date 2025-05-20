@@ -28,7 +28,7 @@ export const getPostsByCategorySlug = async (categorySlug: string): Promise<Post
       {
         params: {
           'filter[category][slug][_eq]': categorySlug,
-          fields: 'id,title,slug,thumbnail,summary,date_updated,category.name,category.slug,category.id'
+          fields: 'id,title,slug,thumbnail,summary,date_created,category.name,category.slug,category.id'
         }
       }
     );

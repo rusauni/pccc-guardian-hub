@@ -1,7 +1,52 @@
-import { EditorContent } from '@/components/EditorContent/EditorContent';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import { Breadcrumbs } from '@/components/Breadcrumbs';
+import { EditorContent } from '@/components/EditorContent/EditorContent';
 import { getPostDetailBySlug } from '@/repository/GetPostDetailBySlug';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+
+// Mock data for related articles and categories
+const relatedArticles = [
+  {
+    id: 1,
+    title: 'Các biện pháp phòng cháy chữa cháy cơ bản',
+    date_updated: '2025-05-15T10:30:00.000Z',
+    category: { slug: 'tin-tuc-pccc', name: 'Tin tức PCCC' }
+  },
+  {
+    id: 2,
+    title: 'Hướng dẫn sử dụng bình chữa cháy đúng cách',
+    date_updated: '2025-05-10T14:20:00.000Z',
+    category: { slug: 'huong-dan-cong-dong', name: 'Hướng dẫn cộng đồng' }
+  },
+  {
+    id: 3,
+    title: 'Quy định mới về PCCC trong tòa nhà cao tầng',
+    date_updated: '2025-05-05T09:15:00.000Z',
+    category: { slug: 'van-ban-phap-quy', name: 'Văn bản pháp quy' }
+  }
+];
+
+const categories = [
+  { name: 'Tin tức PCCC', slug: 'tin-tuc-pccc' },
+  { name: 'Hướng dẫn cộng đồng', slug: 'huong-dan-cong-dong' },
+  { name: 'Văn bản pháp quy', slug: 'van-ban-phap-quy' },
+  { name: 'Thủ tục hành chính', slug: 'thu-tuc-hanh-chinh' },
+  { name: 'Hướng dẫn nghiệp vụ', slug: 'huong-dan-nghiep-vu' },
+  { name: 'Nghiên cứu - Trao đổi', slug: 'nghien-cuu-trao-doi' }
+];
+
+// Format date helper function
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
 
 interface Article {
   id: number;
@@ -370,16 +415,41 @@ export function TestEditor() {
 
   if (isLoading) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl">
-        <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-3/4 mx-auto"></div>
-          <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-          <div className="h-64 bg-gray-200 rounded"></div>
-          <div className="space-y-2">
-            <div className="h-4 bg-gray-200 rounded"></div>
-            <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-grow py-10">
+          <div className="container mx-auto px-4">
+            <div className="animate-pulse space-y-6">
+              <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+              <div className="h-96 bg-gray-200 rounded"></div>
+              <div className="space-y-3">
+                <div className="h-4 bg-gray-200 rounded w-full"></div>
+                <div className="h-4 bg-gray-200 rounded w-5/6"></div>
+                <div className="h-4 bg-gray-200 rounded w-4/6"></div>
+              </div>
+            </div>
           </div>
-        </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (error || !article) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-grow py-10">
+          <div className="container mx-auto px-4 text-center">
+            <h1 className="text-2xl font-bold">Bài viết không tồn tại</h1>
+            <Link to="/" className="text-pccc-primary hover:underline mt-4 inline-block">
+              Quay lại trang chủ
+            </Link>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -387,33 +457,178 @@ export function TestEditor() {
 
   if (error) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl text-center text-red-500">
-        {error}
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-grow py-10">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main content */}
+              <div className="lg:col-span-2">
+                <Card className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="p-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <Badge variant="secondary">
+                          Tin tức PCCC
+                        </Badge>
+                        <span className="text-sm text-gray-500">
+                        </span>
+                      </div>
+                      <h1 className="text-3xl font-bold mb-6">Bài viết không tồn tại</h1>
+                      
+                      <div className="prose max-w-none">
+                        <p className="text-lg mb-6">
+                          {error}
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div className="container mx-auto p-4 max-w-4xl text-center">
-        Không tìm thấy bài viết
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <Breadcrumbs />
+        <main className="flex-grow py-10">
+          <div className="container mx-auto px-4">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Main content */}
+              <div className="lg:col-span-2">
+                <Card className="overflow-hidden">
+                  <CardContent className="p-0">
+                    <div className="p-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <Badge variant="secondary">
+                          Tin tức PCCC
+                        </Badge>
+                        <span className="text-sm text-gray-500">
+                        </span>
+                      </div>
+                      <h1 className="text-3xl font-bold mb-6">Bài viết không tồn tại</h1>
+                      
+                      <div className="prose max-w-none">
+                        <p className="text-lg mb-6">
+                          Không tìm thấy bài viết
+                        </p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
 
-  const formattedDate = new Date(article.date_updated).toLocaleDateString('vi-VN', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  // Format the date using our helper function
+  const formattedDate = formatDate(article.date_updated);
 
   return (
-    <div className="container mx-auto max-w-4xl">
-      <div className="prose max-w-none">
-        <EditorContent content={article.content} />
-      </div>
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+      <Breadcrumbs />
+      <main className="flex-grow py-10">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main content */}
+            <div className="lg:col-span-2">
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  {article.thumbnailUrl && (
+                    <img 
+                      src={article.thumbnailUrl} 
+                      alt={article.title} 
+                      className="w-full h-[400px] object-cover"
+                    />
+                  )}
+                  <div className="p-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <Badge variant="secondary">
+                        {article.category?.name || 'Tin tức PCCC'}
+                      </Badge>
+                      <span className="text-sm text-gray-500">
+                        {formattedDate}
+                      </span>
+                    </div>
+                    {/* <h1 className="text-3xl font-bold mb-6">{article.title}</h1> */}
+                    
+                    <div className="prose max-w-none">
+                      {article.content ? (
+                        <EditorContent content={article.content} className="mt-6" />
+                      ) : (
+                        <p className="text-lg mb-6">
+                          {article.summary}
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Right Sidebar */}
+            <div className="space-y-6">
+              {/* Related Articles */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-bold mb-4 pb-2 border-b">Bài viết liên quan</h3>
+                  <div className="space-y-4">
+                    {relatedArticles.map((item) => (
+                      <div key={item.id} className="pb-3 border-b last:border-0">
+                        <Link 
+                          to={`/${item.category.slug}/${item.id}`}
+                          className="text-sm font-medium hover:text-blue-600 line-clamp-2"
+                        >
+                          {item.title}
+                        </Link>
+                        <p className="text-xs text-gray-500 mt-1">
+                          {formatDate(item.date_updated)}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Categories */}
+              <Card>
+                <CardContent className="p-4">
+                  <h3 className="text-lg font-bold mb-4 pb-2 border-b">Danh mục tin</h3>
+                  <ul className="space-y-2">
+                    {categories.map((category) => (
+                      <li key={category.slug}>
+                        <Link 
+                          to={`/${category.slug}`}
+                          className="text-sm text-gray-700 hover:text-blue-600 flex items-center py-1.5"
+                        >
+                          <span className="w-1.5 h-1.5 bg-gray-300 rounded-full mr-2"></span>
+                          {category.name}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </main>
+      <Footer />
     </div>
   );
-}
+};
 
 export default TestEditor;

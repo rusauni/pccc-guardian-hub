@@ -83,8 +83,9 @@ export async function parseEditorContent(editorData: any): Promise<string> {
 
         case 'image':
           if (block.data?.file?.url) {
-            const figureClass = `my-6 ${alignmentClass}`;
-            const imgClass = 'max-w-full h-auto rounded-lg shadow-md';
+            // Always center images by default
+            const figureClass = 'my-6 mx-auto text-center';
+            const imgClass = 'max-w-full h-auto rounded-lg shadow-md mx-auto';
             const caption = block.data.caption 
               ? `<figcaption class="text-center text-sm text-gray-600 mt-2">${block.data.caption}</figcaption>` 
               : '';
@@ -148,8 +149,9 @@ export async function parseEditorContent(editorData: any): Promise<string> {
 
         case 'embed':
           if (block.data?.html) {
+            // Always center embeds (videos) by default
             html += `
-              <div class="my-6 aspect-video w-full">
+              <div class="my-6 aspect-video w-full max-w-4xl mx-auto">
                 <div class="relative h-0 pb-[56.25%] overflow-hidden rounded-lg">
                   <div class="absolute top-0 left-0 w-full h-full">
                     ${block.data.html}
