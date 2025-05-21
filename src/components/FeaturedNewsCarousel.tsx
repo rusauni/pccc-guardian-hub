@@ -1,45 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { latestNews, communityGuides, regulations, videos, procedures, professionalGuides, research } from '@/data/mockData';
+import { getFeaturedPosts, FeaturedArticle } from "@/repository/GetFeaturedPosts";
+import { getAssetUrl } from "@/config/api";
 
-// Create featured news from mock data
-const featuredNews = [
-  ...latestNews.slice(0, 2),
-  ...regulations.slice(0, 1),
-  ...communityGuides.slice(0, 2)
-].map(item => ({
-  id: item.id,
-  title: item.title,
-  category: item.category.name,
-  image: item.thumbnailUrl || "https://via.placeholder.com/600x400?text=News+Image",
-  date: new Date(item.date_updated).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-  slug: `/${item.category.slug}/${item.slug}`
-}));
-
-// Combine all news items for latest news
-const allNewsItems = [
-  ...latestNews,
-  ...communityGuides,
-  ...regulations,
-  ...procedures,
-  ...professionalGuides,
-  ...research
-];
-
-// Sort by date (newest first) and take the top 5
-const recentPosts = allNewsItems
-  .sort((a, b) => new Date(b.date_updated).getTime() - new Date(a.date_updated).getTime())
-  .slice(0, 5)
-  .map(item => ({
-    id: item.id,
-    title: item.title,
-    category: item.category.name,
-    date: new Date(item.date_updated).toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' }),
-    slug: `/${item.category.slug}/${item.slug}`
-  }));
+interface FeaturedNewsItem extends Omit<FeaturedArticle, 'date_created'> {
+  date: string;
+  image: string;
+  slug: string;
+  thumbnailUrl: string;
+}
 
 // Small Calendar icon component for the date
 const CalendarIcon = ({ className }: { className?: string }) => (
@@ -61,10 +33,59 @@ const CalendarIcon = ({ className }: { className?: string }) => (
 );
 
 const FeaturedNewsCarousel = () => {
+  const [featuredNews, setFeaturedNews] = useState<FeaturedNewsItem[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<{ message: string; canRetry: boolean } | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const maxIndex = featuredNews.length - 1;
   const slideInterval = 7000; // 7 seconds per slide
+
+  // Get recent posts from featured news
+  const recentPosts = featuredNews.slice(0, 5).map(item => ({
+    id: item.id,
+    title: item.title,
+    category: item.category?.name || 'Khác',
+    date: item.date,
+    slug: item.slug
+  }));
+
+  const fetchFeaturedPosts = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
+      const posts = await getFeaturedPosts();
+      const formattedPosts: FeaturedNewsItem[] = posts.map(post => ({
+        ...post,
+        image: getAssetUrl(post.thumbnail),
+        thumbnailUrl: getAssetUrl(post.thumbnail),
+        date: new Date(post.date_created).toLocaleDateString('vi-VN', { 
+          day: '2-digit', 
+          month: '2-digit', 
+          year: 'numeric' 
+        }),
+        slug: `/${post.category.slug}/${post.slug}`
+      }));
+      setFeaturedNews(formattedPosts);
+    } catch (err) {
+      console.error('Error in fetchFeaturedPosts:', err);
+      setError({
+        message: 'Không thể tải tin tức nổi bật. Vui lòng thử lại sau.',
+        canRetry: true
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchFeaturedPosts();
+  }, [fetchFeaturedPosts]);
+
+  // Update current index when featuredNews changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [featuredNews]);
   
   const nextSlide = () => {
     setCurrentIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
@@ -110,6 +131,81 @@ const FeaturedNewsCarousel = () => {
 
   // Fallback image for error handling
   const fallbackImage = "https://via.placeholder.com/600x400?text=News+Image";
+
+  if (isLoading) {
+    return (
+      <section className="pt-12">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center mb-6">
+            <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
+            <h2 className="text-2xl font-bold text-pccc-dark dark:text-white">Tin tức nổi bật trong tuần</h2>
+          </div>
+          <div className="text-center py-8">
+            <div className="animate-pulse">Đang tải...</div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="pt-12">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center">
+              <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
+              <h2 className="text-2xl font-bold text-pccc-dark dark:text-white">Tin tức nổi bật trong tuần</h2>
+            </div>
+          </div>
+          <div className="text-center py-8 border border-gray-200 dark:border-gray-700 rounded-lg bg-white/50 dark:bg-gray-800/50">
+            <div className="text-red-500 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <p className="mt-2 text-lg font-medium">Đã xảy ra lỗi</p>
+              <p className="text-gray-600 dark:text-gray-300 mt-1">{error.message}</p>
+            </div>
+            {error.canRetry && (
+              <button
+                onClick={fetchFeaturedPosts}
+                disabled={isLoading}
+                className="mt-4 px-4 py-2 bg-pccc-primary text-white rounded-md hover:bg-pccc-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center mx-auto"
+              >
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Đang tải lại...
+                  </>
+                ) : (
+                  'Thử lại'
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (featuredNews.length === 0) {
+    return (
+      <section className="pt-12">
+        <div className="container mx-auto px-4">
+          <div className="flex items-center mb-6">
+            <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
+            <h2 className="text-2xl font-bold text-pccc-dark dark:text-white">Tin tức nổi bật trong tuần</h2>
+          </div>
+          <div className="text-center py-8">
+            Không có tin tức nổi bật nào.
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="pt-12">
@@ -165,7 +261,9 @@ const FeaturedNewsCarousel = () => {
                           }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent flex flex-col justify-end p-8">
-                          <Badge variant="secondary" className="mb-3 w-fit font-medium">{news.category}</Badge>
+                          <Badge variant="secondary" className="mb-3 w-fit font-medium">
+                            {news.category?.name || 'Khác'}
+                          </Badge>
                           <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3">{news.title}</h3>
                           <div className="flex items-center text-gray-300">
                             <CalendarIcon className="h-4 w-4 mr-2" />
@@ -197,11 +295,15 @@ const FeaturedNewsCarousel = () => {
                       }`}
                       onClick={() => goToSlide(index)}
                     >
-                      <div className={`relative w-28 h-16 md:w-36 md:h-20 rounded-lg overflow-hidden ${
-                        index === currentIndex ? 'ring-2 ring-gray-500' : 'ring-1 ring-gray-200'
-                      }`}>
-                        <img 
-                          src={news.image} 
+                      <div
+                        className={`relative w-28 h-16 md:w-36 md:h-20 rounded-lg overflow-hidden ${
+                          index === currentIndex
+                            ? 'ring-2 ring-gray-500'
+                            : 'ring-1 ring-gray-200'
+                        }`}
+                      >
+                        <img
+                          src={news.image}
                           alt={news.title}
                           className="w-full h-full object-cover"
                           onError={(e) => {
@@ -210,35 +312,37 @@ const FeaturedNewsCarousel = () => {
                             target.src = fallbackImage;
                           }}
                         />
-                        {index === currentIndex && (
-                          <>
-                            <div className="absolute inset-0 bg-gray-500/10"></div>
-                            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-500"></div>
-                          </>
-                        )}
-                        <div className="absolute bottom-0 left-0 right-0 h-5 bg-gradient-to-t from-black/60 to-transparent"></div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-            
+
             {/* Latest news section - right side (1/3 width on large screens) */}
             <div className="lg:col-span-1">
-              <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 h-full flex flex-col">
-                <h3 className="text-lg font-bold mb-4 border-b border-gray-100 dark:border-gray-700 pb-3 text-pccc-dark dark:text-white">Bài đăng gần nhất</h3>
-                <div className="space-y-4 flex-grow">
-                  {recentPosts.map((news) => (
-                    <Card key={news.id} className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:shadow-sm dark:hover:shadow-gray-700/50 transition-shadow duration-300">
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 h-full">
+                <h3 className="text-lg font-bold mb-4 border-b border-gray-100 dark:border-gray-700 pb-3 text-pccc-dark dark:text-white">
+                  Bài đăng gần nhất
+                </h3>
+                <div className="space-y-4">
+                  {recentPosts.map((post) => (
+                    <Card
+                      key={post.id}
+                      className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:shadow-sm dark:hover:shadow-gray-700/50 transition-shadow duration-300"
+                    >
                       <CardContent className="p-4">
-                        <Link to={news.slug} className="block hover:text-pccc-primary transition-colors duration-300">
+                        <Link to={post.slug} className="block hover:text-pccc-primary transition-colors duration-300">
                           <div className="flex flex-col">
-                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase">{news.category}</span>
-                            <h4 className="text-sm font-semibold line-clamp-2 mb-1.5 dark:text-gray-200 hover:text-pccc-primary dark:hover:text-pccc-primary transition-colors">{news.title}</h4>
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase">
+                              {post.category}
+                            </span>
+                            <h4 className="text-sm font-semibold line-clamp-2 mb-1.5 dark:text-gray-200 hover:text-pccc-primary dark:hover:text-pccc-primary transition-colors">
+                              {post.title}
+                            </h4>
                             <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center">
                               <CalendarIcon className="h-3 w-3 mr-1" />
-                              {news.date}
+                              {post.date}
                             </span>
                           </div>
                         </Link>

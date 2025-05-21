@@ -13,7 +13,7 @@ const NewsPage = () => {
     thumbnail: "news-pccc",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: `${newsTitles[i]}. Cập nhật thông tin mới nhất về hoạt động PCCC và các sự kiện liên quan.`,
-    date_updated: `2025-${(i + 1).toString().padStart(2, '0')}-15T10:00:00.000Z`,
+    date_created: `2025-${(i + 1).toString().padStart(2, '0')}-15T10:00:00.000Z`,
     category: {
       name: "Tin tức PCCC",
       slug: "tin-tuc-pccc",

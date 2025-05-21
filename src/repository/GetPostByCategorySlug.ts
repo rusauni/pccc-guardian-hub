@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_BASE, getAssetUrl } from '@/config/api';
 
 export interface Post {
   id: number;
@@ -7,7 +8,7 @@ export interface Post {
   thumbnail: string;
   thumbnailUrl: string;
   summary: string;
-  date_updated: string;
+  date_created: string;
   category: {
     name: string;
     slug: string;
@@ -19,12 +20,12 @@ export interface PostResponse {
   data: Post[];
 }
 
-const BASE_URL = 'https://dashboard.pccc40.com';
+// Use the centralized API configuration
 
 export const getPostsByCategorySlug = async (categorySlug: string): Promise<Post[]> => {
   try {
     const response = await axios.get<PostResponse>(
-      `${BASE_URL}/items/articles`,
+      `${API_BASE}/items/articles`,
       {
         params: {
           'filter[category][slug][_eq]': categorySlug,
@@ -36,7 +37,7 @@ export const getPostsByCategorySlug = async (categorySlug: string): Promise<Post
     // Transform the response to add thumbnailUrl
     const transformedPosts = response.data.data.map(post => ({
       ...post,
-      thumbnailUrl: `${BASE_URL}/assets/${post.thumbnail}`
+      thumbnailUrl: getAssetUrl(post.thumbnail)
     }));
 
     return transformedPosts;

@@ -13,7 +13,7 @@ const ProceduresPage = () => {
     thumbnail: "administrative-procedure",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: `Hướng dẫn chi tiết về ${procedureTitles[i].toLowerCase()} theo quy định mới nhất của Bộ Công an.`,
-    date_updated: `2025-${(i + 1).toString().padStart(2, '0')}-01T08:00:00.000Z`,
+    date_created: `2025-${(i + 1).toString().padStart(2, '0')}-01T08:00:00.000Z`,
     category: {
       name: "Thủ tục hành chính",
       slug: "thu-tuc-hanh-chinh",

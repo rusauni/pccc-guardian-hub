@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { getAssetUrl } from '@/config/api';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -13,19 +14,19 @@ const relatedArticles = [
   {
     id: 1,
     title: 'Các biện pháp phòng cháy chữa cháy cơ bản',
-    date_updated: '2025-05-15T10:30:00.000Z',
+    date_created: '2025-05-15T10:30:00.000Z',
     category: { slug: 'tin-tuc-pccc', name: 'Tin tức PCCC' }
   },
   {
     id: 2,
     title: 'Hướng dẫn sử dụng bình chữa cháy đúng cách',
-    date_updated: '2025-05-10T14:20:00.000Z',
+    date_created: '2025-05-10T14:20:00.000Z',
     category: { slug: 'huong-dan-cong-dong', name: 'Hướng dẫn cộng đồng' }
   },
   {
     id: 3,
     title: 'Quy định mới về PCCC trong tòa nhà cao tầng',
-    date_updated: '2025-05-05T09:15:00.000Z',
+    date_created: '2025-05-05T09:15:00.000Z',
     category: { slug: 'van-ban-phap-quy', name: 'Văn bản pháp quy' }
   }
 ];
@@ -55,7 +56,7 @@ interface Article {
   thumbnail: string;
   thumbnailUrl: string;
   summary: string;
-  date_updated: string;
+  date_created: string;
   content: {
     time: number;
     blocks: any[];
@@ -77,7 +78,7 @@ const sampleData = {
             "slug": "mot-so-giai-phap-de-bao-dam-giao-thong-phuc-vu-chua-chay",
             "thumbnail": "492bce69-677a-4ce7-90c5-56060c352ccd",
             "summary": "Trong 06 tháng đầu năm 2022, toàn quốc xảy ra 848 vụ cháy (trong đó có 22 vụ cháy lớn, 397 vụ cháy trung bình và 429 vụ cháy nhỏ), làm chết 41 người, bị thương 42 người, thiệt hại về tài sản sơ bộ ước tính khoảng 414,73 tỷ đồng và 40,87 ha rừng",
-            "date_updated": "2025-05-18T12:27:12.847Z",
+            "date_created": "2025-05-18T12:27:12.847Z",
             "content": {
                 "time": 1747564853435,
                 "blocks": [
@@ -368,7 +369,7 @@ interface Article {
   thumbnail: string;
   thumbnailUrl: string;
   summary: string;
-  date_updated: string;
+  date_created: string;
   category: {
     name: string;
     slug: string;
@@ -396,7 +397,7 @@ export function TestEditor() {
         if (data) {
           const articleWithThumbnail = {
             ...data,
-            thumbnailUrl: data.thumbnail ? `https://dashboard.pccc40.com/assets/${data.thumbnail}` : ''
+            thumbnailUrl: getAssetUrl(data.thumbnail)
           };
           setArticle(articleWithThumbnail);
         } else {
@@ -534,7 +535,7 @@ export function TestEditor() {
   }
 
   // Format the date using our helper function
-  const formattedDate = formatDate(article.date_updated);
+  const formattedDate = formatDate(article.date_created);
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -595,7 +596,7 @@ export function TestEditor() {
                           {item.title}
                         </Link>
                         <p className="text-xs text-gray-500 mt-1">
-                          {formatDate(item.date_updated)}
+                          {formatDate(item.date_created)}
                         </p>
                       </div>
                     ))}

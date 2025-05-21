@@ -7,7 +7,7 @@ export const latestNews = [
     thumbnail: "492bce69-677a-4ce7-90c5-56060c352ccd",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Trong 06 tháng đầu năm 2022, toàn quốc xảy ra 848 vụ cháy (trong đó có 22 vụ cháy lớn, 397 vụ cháy trung bình và 429 vụ cháy nhỏ), làm chết 41 người, bị thương 42 người, thiệt hại về tài sản sơ bộ ước tính khoảng 414,73 tỷ đồng và 40,87 ha rừng",
-    date_updated: "2025-05-18T12:27:12.847Z",
+    date_created: "2025-05-18T12:27:12.847Z",
     category: {
       name: "Tin tức PCCC",
       slug: "tin-tuc-pccc",
@@ -21,7 +21,7 @@ export const latestNews = [
     thumbnail: "safety-exit-guide",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Cách xử lý tình huống khẩn cấp và các kỹ năng thoát nạn cần biết khi gặp hỏa hoạn tại nhà và nơi công cộng.",
-    date_updated: "2025-05-14T10:00:00.000Z",
+    date_created: "2025-05-14T10:00:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -35,7 +35,7 @@ export const latestNews = [
     thumbnail: "thong-tu-pccc",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Thông tư mới quy định chi tiết về công tác quản lý, kiểm tra an toàn PCCC tại các khu dân cư, chung cư cao tầng.",
-    date_updated: "2025-05-12T09:00:00.000Z",
+    date_created: "2025-05-12T09:00:00.000Z",
     category: {
       name: "Văn bản pháp quy",
       slug: "van-ban-phap-quy",
@@ -49,7 +49,7 @@ export const latestNews = [
     thumbnail: "dien-tap-truong-hoc",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Các trường học trên địa bàn thành phố tổ chức diễn tập PCCC, nâng cao kỹ năng xử lý tình huống cho học sinh và giáo viên.",
-    date_updated: "2025-05-10T14:30:00.000Z",
+    date_created: "2025-05-10T14:30:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -66,7 +66,7 @@ export const communityGuides = [
     thumbnail: "fire-extinguisher-guide",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Các bước sử dụng bình chữa cháy hiệu quả, an toàn trong tình huống khẩn cấp.",
-    date_updated: "2025-05-09T08:30:00.000Z",
+    date_created: "2025-05-09T08:30:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -80,7 +80,7 @@ export const communityGuides = [
     thumbnail: "thiet-bi-bao-chay",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Tìm hiểu các loại thiết bị báo cháy phù hợp cho căn hộ, nhà riêng và cách lắp đặt đúng kỹ thuật.",
-    date_updated: "2025-05-07T11:00:00.000Z",
+    date_created: "2025-05-07T11:00:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -94,7 +94,7 @@ export const communityGuides = [
     thumbnail: "escape-plan-family",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Hướng dẫn chi tiết cách lập kế hoạch thoát nạn an toàn cho mọi thành viên trong gia đình.",
-    date_updated: "2025-05-05T13:00:00.000Z",
+    date_created: "2025-05-05T13:00:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -108,7 +108,7 @@ export const communityGuides = [
     thumbnail: "fire-prevention-basics",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Tìm hiểu các nguyên nhân phổ biến gây cháy tại gia đình, văn phòng và biện pháp phòng tránh hiệu quả.",
-    date_updated: "2025-05-03T10:15:00.000Z",
+    date_created: "2025-05-03T10:15:00.000Z",
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",
@@ -125,7 +125,7 @@ export const regulations = [
     thumbnail: "regulation-136-2020",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Nghị định quy định chi tiết một số điều và biện pháp thi hành Luật Phòng cháy và chữa cháy.",
-    date_updated: "2025-05-01T09:00:00.000Z",
+    date_created: "2025-05-01T09:00:00.000Z",
     category: {
       name: "Văn bản pháp quy",
       slug: "van-ban-phap-quy",
@@ -139,7 +139,7 @@ export const regulations = [
     thumbnail: "thong-tu-149",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Thông tư quy định chi tiết một số điều và biện pháp thi hành Luật Phòng cháy và chữa cháy.",
-    date_updated: "2025-04-30T10:00:00.000Z",
+    date_created: "2025-04-30T10:00:00.000Z",
     category: {
       name: "Văn bản pháp quy",
       slug: "van-ban-phap-quy",
@@ -153,7 +153,7 @@ export const regulations = [
     thumbnail: "tcvn-3890",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Tiêu chuẩn quốc gia về phương tiện phòng cháy và chữa cháy cho nhà và công trình.",
-    date_updated: "2025-04-28T08:45:00.000Z",
+    date_created: "2025-04-28T08:45:00.000Z",
     category: {
       name: "Văn bản pháp quy",
       slug: "van-ban-phap-quy",
@@ -167,7 +167,7 @@ export const regulations = [
     thumbnail: "qcvn-06-2022",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Quy chuẩn kỹ thuật quy định các yêu cầu an toàn cháy cho nhà và công trình xây dựng.",
-    date_updated: "2025-04-25T11:30:00.000Z",
+    date_created: "2025-04-25T11:30:00.000Z",
     category: {
       name: "Văn bản pháp quy",
       slug: "van-ban-phap-quy",
@@ -184,7 +184,7 @@ export const procedures = [
     thumbnail: "permit-procedure",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Hướng dẫn chi tiết quy trình, hồ sơ xin cấp phép về phòng cháy chữa cháy cho các công trình xây dựng.",
-    date_updated: "2025-04-22T14:00:00.000Z",
+    date_created: "2025-04-22T14:00:00.000Z",
     category: {
       name: "Thủ tục hành chính",
       slug: "thu-tuc-hanh-chinh",
@@ -198,7 +198,7 @@ export const procedures = [
     thumbnail: "certification-form",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Mẫu đơn và hướng dẫn kê khai để xin cấp giấy chứng nhận đủ điều kiện về PCCC cho cơ sở kinh doanh.",
-    date_updated: "2025-04-20T09:15:00.000Z",
+    date_created: "2025-04-20T09:15:00.000Z",
     category: {
       name: "Thủ tục hành chính",
       slug: "thu-tuc-hanh-chinh",
@@ -212,7 +212,7 @@ export const procedures = [
     thumbnail: "inspection-procedure",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Các bước kiểm định phương tiện PCCC và hồ sơ cần thiết theo quy định của pháp luật.",
-    date_updated: "2025-04-18T10:30:00.000Z",
+    date_created: "2025-04-18T10:30:00.000Z",
     category: {
       name: "Thủ tục hành chính",
       slug: "thu-tuc-hanh-chinh",
@@ -226,7 +226,7 @@ export const procedures = [
     thumbnail: "training-permission",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Quy trình xin phép và chuẩn bị hồ sơ để tổ chức các khóa tập huấn về phòng cháy chữa cháy.",
-    date_updated: "2025-04-15T13:45:00.000Z",
+    date_created: "2025-04-15T13:45:00.000Z",
     category: {
       name: "Thủ tục hành chính",
       slug: "thu-tuc-hanh-chinh",
@@ -243,7 +243,7 @@ export const professionalGuides = [
     thumbnail: "maintenance-guide",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Hướng dẫn chi tiết quy trình kiểm tra, bảo dưỡng định kỳ hệ thống PCCC tại các công trình.",
-    date_updated: "2025-04-12T11:00:00.000Z",
+    date_created: "2025-04-12T11:00:00.000Z",
     category: {
       name: "Hướng dẫn nghiệp vụ",
       slug: "huong-dan-nghiep-vu",
@@ -257,7 +257,7 @@ export const professionalGuides = [
     thumbnail: "firefighting-techniques",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Phân loại đám cháy và kỹ thuật dập tắt phù hợp cho từng loại theo tiêu chuẩn quốc tế.",
-    date_updated: "2025-04-10T09:30:00.000Z",
+    date_created: "2025-04-10T09:30:00.000Z",
     category: {
       name: "Hướng dẫn nghiệp vụ",
       slug: "huong-dan-nghiep-vu",
@@ -271,7 +271,7 @@ export const professionalGuides = [
     thumbnail: "industrial-risk-assessment",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Các phương pháp đánh giá rủi ro cháy nổ trong môi trường công nghiệp và biện pháp kiểm soát.",
-    date_updated: "2025-04-08T14:15:00.000Z",
+    date_created: "2025-04-08T14:15:00.000Z",
     category: {
       name: "Hướng dẫn nghiệp vụ",
       slug: "huong-dan-nghiep-vu",
@@ -285,7 +285,7 @@ export const professionalGuides = [
     thumbnail: "automatic-system-design",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Nguyên lý thiết kế và lắp đặt hệ thống phòng cháy chữa cháy tự động cho các công trình.",
-    date_updated: "2025-04-05T10:45:00.000Z",
+    date_created: "2025-04-05T10:45:00.000Z",
     category: {
       name: "Hướng dẫn nghiệp vụ",
       slug: "huong-dan-nghiep-vu",
@@ -302,7 +302,7 @@ export const research = [
     thumbnail: "research-advanced-solutions",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Nghiên cứu về các giải pháp PCCC tiên tiến và khả năng áp dụng tại Việt Nam.",
-    date_updated: "2025-04-05T15:30:00.000Z",
+    date_created: "2025-04-05T15:30:00.000Z",
     category: {
       name: "Nghiên cứu - Trao đổi",
       slug: "nghien-cuu-trao-doi",
@@ -316,7 +316,7 @@ export const research = [
     thumbnail: "fire-resistant-materials",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Kết quả nghiên cứu về hiệu quả của các loại vật liệu chống cháy mới trên thị trường Việt Nam.",
-    date_updated: "2025-03-30T11:00:00.000Z",
+    date_created: "2025-03-30T11:00:00.000Z",
     category: {
       name: "Nghiên cứu - Trao đổi",
       slug: "nghien-cuu-trao-doi",
@@ -330,7 +330,7 @@ export const research = [
     thumbnail: "ai-fire-detection",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Nghiên cứu về khả năng ứng dụng trí tuệ nhân tạo trong công tác dự báo và phát hiện cháy sớm.",
-    date_updated: "2025-03-28T09:45:00.000Z",
+    date_created: "2025-03-28T09:45:00.000Z",
     category: {
       name: "Nghiên cứu - Trao đổi",
       slug: "nghien-cuu-trao-doi",
@@ -344,7 +344,7 @@ export const research = [
     thumbnail: "fire-analysis-2024",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: "Phân tích thống kê và đánh giá nguyên nhân các vụ cháy lớn xảy ra trong năm 2024 tại Việt Nam.",
-    date_updated: "2025-03-25T14:30:00.000Z",
+    date_created: "2025-03-25T14:30:00.000Z",
     category: {
       name: "Nghiên cứu - Trao đổi",
       slug: "nghien-cuu-trao-doi",
@@ -359,7 +359,7 @@ export const videos = [
     title: "Hướng dẫn sử dụng bình chữa cháy",
     thumbnail: "video-fire-extinguisher",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
-    date_updated: "2025-05-15T08:00:00.000Z",
+    date_created: "2025-05-15T08:00:00.000Z",
     slug: "huong-dan-su-dung-binh-chua-chay",
     category: {
       name: "Video hướng dẫn",
@@ -372,7 +372,7 @@ export const videos = [
     title: "Kỹ năng thoát hiểm khi có đám cháy trong nhà cao tầng",
     thumbnail: "video-highrise-escape",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
-    date_updated: "2025-03-18T11:30:00.000Z",
+    date_created: "2025-03-18T11:30:00.000Z",
     slug: "ky-nang-thoat-hiem-khi-co-dam-chay-trong-nha-cao-tang",
     category: {
       name: "Video hướng dẫn",
@@ -385,7 +385,7 @@ export const videos = [
     title: "Thực hành sơ cấp cứu nạn nhân hỏa hoạn",
     thumbnail: "video-fire-victim-firstaid",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
-    date_updated: "2025-03-15T09:15:00.000Z",
+    date_created: "2025-03-15T09:15:00.000Z",
     slug: "thuc-hanh-so-cap-cuu-nan-nhan-hoa-hoan",
     category: {
       name: "Video hướng dẫn",
@@ -398,7 +398,7 @@ export const videos = [
     title: "Diễn tập PCCC quy mô lớn tại khu công nghiệp",
     thumbnail: "video-industrial-drill",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
-    date_updated: "2025-03-12T13:45:00.000Z",
+    date_created: "2025-03-12T13:45:00.000Z",
     slug: "dien-tap-pccc-quy-mo-lon-tai-khu-cong-nghiep",
     category: {
       name: "Video hướng dẫn",

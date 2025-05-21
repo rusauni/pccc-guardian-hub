@@ -90,10 +90,18 @@ export async function parseEditorContent(editorData: any): Promise<string> {
               ? `<figcaption class="text-center text-sm text-gray-600 mt-2">${block.data.caption}</figcaption>` 
               : '';
             
+            // Check if URL starts with '/assets' and add base URL if needed
+            let imageUrl = block.data.file.url;
+            if (imageUrl.startsWith('/assets')) {
+              // Import BASE_URL from config
+              const { BASE_URL } = await import('../config/api');
+              imageUrl = `${BASE_URL}${imageUrl}`;
+            }
+            
             html += `
               <figure class="${figureClass}">
                 <img 
-                  src="${block.data.file.url}" 
+                  src="${imageUrl}" 
                   alt="${block.data.caption || ''}" 
                   class="${imgClass}"
                   loading="lazy"

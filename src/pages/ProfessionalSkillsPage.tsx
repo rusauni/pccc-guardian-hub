@@ -13,7 +13,7 @@ const ProfessionalSkillsPage = () => {
     thumbnail: "professional-guide",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: `Tài liệu hướng dẫn nghiệp vụ về ${professionalTitles[i].toLowerCase()} dành cho lực lượng PCCC.`,
-    date_updated: `2025-${(i + 1).toString().padStart(2, '0')}-05T11:00:00.000Z`,
+    date_created: `2025-${(i + 1).toString().padStart(2, '0')}-05T11:00:00.000Z`,
     category: {
       name: "Hướng dẫn nghiệp vụ",
       slug: "huong-dan-nghiep-vu",

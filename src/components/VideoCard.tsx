@@ -27,7 +27,7 @@ interface VideoItem {
   title: string;
   thumbnail: string;
   thumbnailUrl: string;
-  date_updated: string;
+  date_created: string;
   slug: string;
   category: {
     name: string;
@@ -78,7 +78,7 @@ const VideoCard = ({ video }: VideoCardProps) => {
             <h3 className="text-lg font-semibold line-clamp-2 mb-3 hover:text-pccc-primary transition-colors">{video.title}</h3>
             <div className="flex items-center text-sm text-gray-400">
               <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
-              <span>{formatDate(video.date_updated)}</span>
+              <span>{formatDate(video.date_created)}</span>
             </div>
           </div>
         </Link>

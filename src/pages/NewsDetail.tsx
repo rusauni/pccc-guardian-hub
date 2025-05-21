@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { API_BASE, ENDPOINTS, getAssetUrl } from '@/config/api';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
@@ -16,6 +17,7 @@ import NewsCard, { NewsItem } from '@/components/NewsCard';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { EditorContent } from '@/components/EditorContent/EditorContent';
+import { getPostsByCategorySlug, Post } from '@/repository/GetPostByCategorySlug';
 
 const allNews = [
   ...latestNews,
@@ -65,7 +67,7 @@ const NewsDetail = () => {
         } else {
           // If not found in mock data, try to fetch from API
           const response = await fetch(
-            `https://dashboard.pccc40.com/items/articles?filter[slug][_eq]=${id}&fields=*,category.name,category.slug,category.id`
+            `${API_BASE}/items/articles?filter[slug][_eq]=${id}&fields=*,category.name,category.slug,category.id`
           );
           
           if (response.ok) {
@@ -75,15 +77,42 @@ const NewsDetail = () => {
               // Transform API data to match our NewsItem type
               const formattedArticle: NewsItem = {
                 ...articleData,
-                thumbnailUrl: `https://dashboard.pccc40.com/assets/${articleData.thumbnail}`,
-                date_updated: articleData.date_updated || new Date().toISOString(),
+                thumbnailUrl: getAssetUrl(articleData.thumbnail),
+                date_created: articleData.date_created || new Date().toISOString(),
                 category: articleData.category || { id: 0, name: 'Tin tức', slug: 'tin-tuc' }
               };
               setArticle(formattedArticle);
               
-              // For related articles, we might want to fetch them separately
-              // For now, we'll just use an empty array
-              setRelatedNews([]);
+              // Fetch related articles from the same category (up to 5)
+              if (formattedArticle.category?.slug) {
+                try {
+                  const relatedPosts = await getPostsByCategorySlug(formattedArticle.category.slug);
+                  
+                  // Filter out the current article and limit to 5 posts
+                  const filteredRelated = relatedPosts
+                    .filter(post => post.id !== formattedArticle.id)
+                    .slice(0, 5);
+                  
+                  // Transform Post[] to NewsItem[]
+                  const relatedNewsItems: NewsItem[] = filteredRelated.map(post => ({
+                    id: post.id,
+                    title: post.title,
+                    slug: post.slug,
+                    thumbnail: post.thumbnail || '',
+                    thumbnailUrl: post.thumbnailUrl,
+                    summary: post.summary || '',
+                    date_created: post.date_created,
+                    category: post.category
+                  }));
+                  
+                  setRelatedNews(relatedNewsItems);
+                } catch (error) {
+                  console.error('Error fetching related posts:', error);
+                  setRelatedNews([]);
+                }
+              } else {
+                setRelatedNews([]);
+              }
             }
           }
         }
@@ -138,130 +167,24 @@ const NewsDetail = () => {
     );
   }
 
+  // Define categories for the sidebar
+  const categories = [
+    { name: 'Tin tức PCCC', slug: 'tin-tuc-pccc' },
+    { name: 'Hướng dẫn cộng đồng', slug: 'huong-dan-cong-dong' },
+    { name: 'Văn bản pháp quy', slug: 'van-ban-phap-quy' },
+    { name: 'Thủ tục hành chính', slug: 'thu-tuc-hanh-chinh' },
+    { name: 'Hướng dẫn nghiệp vụ', slug: 'huong-dan-nghiep-vu' },
+    { name: 'Nghiên cứu - Trao đổi', slug: 'nghien-cuu-trao-doi' }
+  ];
+
   return (
-    <DetailPageLayout>
-      <div className="bg-white dark:bg-gray-800 py-8">
-        <div className="container mx-auto px-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Main content */}
-            <div className="lg:col-span-2">
-              <Card className="overflow-hidden bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
-                <CardContent className="p-0">
-                  <img 
-                    src={article.thumbnailUrl} 
-                    alt={article.title} 
-                    className="w-full h-[400px] object-cover"
-                  />
-                  <div className="p-6">
-                    <div className="flex justify-between items-center mb-4">
-                      <Badge variant="secondary">{article.category.name}</Badge>
-                      <span className="text-sm text-gray-500">{formatDate(article.date_updated)}</span>
-                    </div>
-                    <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
-                    
-                    <div className="prose max-w-none text-gray-700 dark:text-gray-300">
-                      {article.content ? (
-                        <EditorContent content={article.content} className="mt-6" />
-                      ) : (
-                        <>
-                          <p className="text-lg mb-6">
-                            {article.summary}
-                          </p>
-                          <p className="mb-6">
-                            Nội dung chi tiết sẽ được cập nhật sớm nhất.
-                          </p>
-                          <h2 className="text-xl font-bold my-4">Các biện pháp an toàn PCCC</h2>
-                          
-                          <p className="mb-4">
-                            Cras commodo posuere massa, vitae fringilla nulla vehicula ac. 
-                            Donec ipsum velit, aliquam nec iaculis at, sodales vel eros. 
-                            Morbi fermentum, lacus sit amet aliquam interdum, lacus risus interdum felis, 
-                            sed faucibus nulla risus eget nulla.
-                          </p>
-                          
-                          <ul className="list-disc pl-5 mb-4">
-                            <li className="mb-2">Kiểm tra hệ thống PCCC định kỳ</li>
-                            <li className="mb-2">Lắp đặt thiết bị báo cháy</li>
-                            <li className="mb-2">Sử dụng vật liệu chống cháy</li>
-                            <li className="mb-2">Tập huấn kỹ năng PCCC cho cư dân</li>
-                          </ul>
-                          
-                          <p className="mb-4">
-                            Vivamus hendrerit varius arcu, eget ultricies magna rutrum sed. 
-                            Nulla facilisi. Aliquam erat volutpat. Pellentesque at feugiat mauris. 
-                            Maecenas tempus nisi ut nulla lacinia, a porta lectus commodo. 
-                            Aliquam non magna vel lectus ultrices dapibus vel in justo.
-                          </p>
-                          
-                          <p className="mb-4">
-                            Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. 
-                            Maecenas lorem nisi, ultrices id lacinia id, eleifend eget libero. 
-                            Sed facilisis, velit ac tempor volutpat, dolor arcu aliquam risus, 
-                            sed imperdiet orci ex vitae arcu.
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {/* Sidebar */}
-            <div className="space-y-6 sticky top-4">
-              <Card className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-lg">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Bài viết liên quan</h3>
-                  <div className="space-y-4">
-                    {relatedNews.map(newsItem => (
-                      <div key={newsItem.id} className="border-b pb-4 last:border-0">
-                        <h4 className="font-semibold mb-1">
-                          <Link 
-                            to={`/${newsItem.category.slug}/${newsItem.slug}`} 
-                            className="hover:text-pccc-primary"
-                          >
-                            {newsItem.title}
-                          </Link>
-                        </h4>
-                        <p className="text-sm text-gray-500">{formatDate(newsItem.date_updated)}</p>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-lg mt-6">
-                <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Danh mục tin</h3>
-                  <ul className="space-y-2">
-                    <li>
-                      <Link to="/tin-tuc-pccc" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Tin tức PCCC</Link>
-                    </li>
-                    <li>
-                      <Link to="/huong-dan-cong-dong" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Hướng dẫn cộng đồng</Link>
-                    </li>
-                    <li>
-                      <Link to="/van-ban-phap-quy" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Văn bản pháp quy</Link>
-                    </li>
-                    <li>
-                      <Link to="/thu-tuc-hanh-chinh" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Thủ tục hành chính</Link>
-                    </li>
-                    <li>
-                      <Link to="/huong-dan-nghiep-vu" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Hướng dẫn nghiệp vụ</Link>
-                    </li>
-                    <li>
-                      <Link to="/nghien-cuu-trao-doi" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Nghiên cứu - Trao đổi</Link>
-                    </li>
-                  </ul>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-          </div>
-        </div>
-      </div>
-    </DetailPageLayout>
+    <DetailPageLayout
+      article={article}
+      relatedNews={relatedNews}
+      categories={categories}
+      isLoading={isLoading}
+      error={null}
+    />
   );
 };
 

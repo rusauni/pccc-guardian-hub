@@ -13,7 +13,7 @@ const CommunityGuidelinesPage = () => {
     thumbnail: "community-guide",
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     summary: `Hướng dẫn chi tiết về ${communityTitles[i].toLowerCase()} cho người dân và cộng đồng.`,
-    date_updated: `2025-${(i + 1).toString().padStart(2, '0')}-10T09:00:00.000Z`,
+    date_created: `2025-${(i + 1).toString().padStart(2, '0')}-10T09:00:00.000Z`,
     category: {
       name: "Hướng dẫn cộng đồng",
       slug: "huong-dan-cong-dong",

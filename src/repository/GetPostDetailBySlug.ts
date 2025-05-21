@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { API_BASE, BASE_URL, getAssetUrl } from '@/config/api';
 
 export interface PostDetail {
   id: number;
@@ -8,7 +9,7 @@ export interface PostDetail {
   thumbnailUrl: string;
   summary: string;
   content: any; // Using any type as per requirement for EditorParser to parse JSON to HTML
-  date_updated: string;
+  date_created: string;
   category: {
     name: string;
     slug: string;
@@ -20,9 +21,7 @@ export interface PostDetailResponse {
   data: PostDetail[];
 }
 
-// Use proxy in development to avoid CORS issues
-const isDevelopment = import.meta.env.MODE === 'development';
-const BASE_URL = isDevelopment ? '/api' : 'https://dashboard.pccc40.com';
+// Process content blocks to handle image and video URLs
 
 const processContentBlocks = (blocks: any[]): any[] => {
   if (!blocks || !Array.isArray(blocks)) return [];
@@ -36,7 +35,7 @@ const processContentBlocks = (blocks: any[]): any[] => {
           ...block.data,
           file: {
             ...block.data.file,
-            url: `https://dashboard.pccc40.com${block.data.file.url}`
+            url: `${BASE_URL}${block.data.file.url}`
           }
         }
       };
@@ -48,7 +47,7 @@ const processContentBlocks = (blocks: any[]): any[] => {
           ...block.data,
           file: {
             ...block.data.file,
-            url: `https://dashboard.pccc40.com${block.data.file.url}`
+            url: `${BASE_URL}${block.data.file.url}`
           }
         }
       };
@@ -60,7 +59,7 @@ const processContentBlocks = (blocks: any[]): any[] => {
 export const getPostDetailBySlug = async (slug: string): Promise<PostDetail | null> => {
   try {
     const response = await axios.get<PostDetailResponse>(
-      `${BASE_URL}/items/articles`,
+      `${API_BASE}/items/articles`,
       {
         params: {
           'filter[slug][_eq]': slug,
