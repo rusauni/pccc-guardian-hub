@@ -38,10 +38,10 @@ const GuidelinesPage = () => {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
       <Breadcrumbs />
-      <main className="flex-grow py-4">
+      <main className="flex-grow py-4 bg-white dark:bg-gray-900">
         {/* Community Guidelines Section */}
         <CategorySection 
           title="Hướng dẫn cộng đồng" 

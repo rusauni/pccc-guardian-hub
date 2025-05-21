@@ -54,34 +54,38 @@ const NewsCard = ({ news, showExcerpt = false }: NewsCardProps) => {
   };
 
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100">
-      <Link to={`/${news.category.slug}/${news.slug}`} className="block focus:outline-none focus-visible:ring-1 focus-visible:ring-ring">
-        <AspectRatio ratio={16 / 9}>
-          <img
-            src={news.thumbnailUrl || fallbackImage}
-            alt={news.title}
-            className="object-cover w-full h-full"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement;
-              target.onerror = null;
-              target.src = fallbackImage;
-            }}
-          />
-        </AspectRatio>
-        <CardContent className="p-5">
-          <Badge variant="secondary" className="mb-2.5 font-medium">
-            {news.category.name}
-          </Badge>
-          <h3 className="text-lg font-semibold line-clamp-2 mb-3 hover:text-pccc-primary transition-colors">{news.title}</h3>
-          {showExcerpt && news.summary && (
-            <p className="text-sm text-muted-foreground line-clamp-3 mb-3">{news.summary}</p>
-          )}
-          <div className="flex items-center text-sm text-gray-400">
-            <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
-            <span>{formatDate(news.date_updated)}</span>
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-pccc-primary/20 border border-gray-100 dark:border-gray-700 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 rounded-xl">
+      <CardContent className="p-0">
+        <Link to={`/${news.category.slug}/${news.slug}`}>
+          <div className="relative">
+            <AspectRatio ratio={16 / 9}>
+              <img
+                src={news.thumbnailUrl || fallbackImage}
+                alt={news.title}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.onerror = null;
+                  target.src = fallbackImage;
+                }}
+              />
+            </AspectRatio>
           </div>
-        </CardContent>
-      </Link>
+          <div className="p-5">
+            <Badge variant="secondary" className="mb-2.5 font-medium">
+              {news.category.name}
+            </Badge>
+            <h3 className="text-lg font-semibold line-clamp-2 mb-3 hover:text-pccc-primary transition-colors">{news.title}</h3>
+            {showExcerpt && news.summary && (
+              <p className="text-sm text-muted-foreground line-clamp-3 mb-3">{news.summary}</p>
+            )}
+            <div className="flex items-center text-sm text-gray-400">
+              <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
+              <span>{formatDate(news.date_updated)}</span>
+            </div>
+          </div>
+        </Link>
+      </CardContent>
     </Card>
   );
 };

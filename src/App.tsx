@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SupabaseProvider } from "@/contexts/SupabaseContext";
+import { ThemeProvider } from "@/contexts/ThemeProvider";
 import Index from "./pages/Index";
 import NewsCategory from "./pages/NewsCategory";
 import VideoPage from "./pages/VideoPage";
@@ -32,11 +33,12 @@ const queryClient = new QueryClient({
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <SupabaseProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
+      <ThemeProvider defaultTheme="light" storageKey="pccc-theme">
+        <TooltipProvider>
+          <SupabaseProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tin-tuc-pccc" element={<NewsPage />} />
@@ -55,9 +57,10 @@ const App = () => {
               <Route path="/preview/:slug" element={<TestEditor />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </SupabaseProvider>
-      </TooltipProvider>
+            </BrowserRouter>
+          </SupabaseProvider>
+        </TooltipProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

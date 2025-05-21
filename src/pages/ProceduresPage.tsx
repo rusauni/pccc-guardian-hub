@@ -22,10 +22,10 @@ const ProceduresPage = () => {
   }));
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
       <Breadcrumbs />
-      <main className="flex-grow pt-8">
+      <main className="flex-grow pt-8 bg-white dark:bg-gray-900">
         {/* Administrative Procedures Section */}
         <GuidelineSection 
           title="Thủ tục hành chính" 

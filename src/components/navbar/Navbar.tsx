@@ -5,6 +5,7 @@ import DesktopMenu from './DesktopMenu';
 import SearchToggle from './SearchToggle';
 import MobileMenuToggle from './MobileMenuToggle';
 import MobileMenu from './MobileMenu';
+import { ThemeToggle } from '../theme/ThemeToggle';
 import { mainNavigation } from './navData';
 
 const Navbar = () => {
@@ -38,8 +39,14 @@ const Navbar = () => {
         </div>
         
         <div className="ml-auto flex items-center space-x-2">
-          <SearchToggle isSearchIconOnly={isSearchIconOnly} />
-          <MobileMenuToggle onToggle={() => setMobileMenuOpen(true)} />
+          <div className="hidden md:flex items-center space-x-2">
+            <SearchToggle isSearchIconOnly={isSearchIconOnly} />
+            <ThemeToggle />
+          </div>
+          <div className="flex items-center space-x-2 md:hidden">
+            <SearchToggle isSearchIconOnly={false} />
+            <MobileMenuToggle onToggle={() => setMobileMenuOpen(true)} />
+          </div>
         </div>
       </div>
       

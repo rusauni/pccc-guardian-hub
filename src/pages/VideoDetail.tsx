@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import DetailPageLayout from '@/components/layouts/DetailPageLayout';
 import VideoCard from '@/components/VideoCard';
 import { videos } from '@/data/mockData';
 import { Card, CardContent } from '@/components/ui/card';
@@ -67,10 +68,7 @@ const VideoDetail = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <Breadcrumbs />
-      <main className="flex-grow py-10">
+    <DetailPageLayout>
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main content */}
@@ -150,9 +148,7 @@ const VideoDetail = () => {
             </div>
           </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+    </DetailPageLayout>
   );
 };
 

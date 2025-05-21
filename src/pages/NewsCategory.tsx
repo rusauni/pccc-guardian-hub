@@ -42,12 +42,15 @@ const NewsCategory = () => {
   const { title, data } = getCategoryData(category || '');
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
       <Navbar />
       <Breadcrumbs />
-      <main className="flex-grow py-10">
+      <main className="flex-grow py-10 bg-white dark:bg-gray-900">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8 text-pccc-dark">{title}</h1>
+          <div className="flex items-center mb-8">
+            <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
+            <h1 className="text-2xl font-bold text-pccc-dark dark:text-white">{title}</h1>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {data.map((item) => (

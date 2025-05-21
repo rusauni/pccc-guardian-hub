@@ -112,12 +112,12 @@ const FeaturedNewsCarousel = () => {
   const fallbackImage = "https://via.placeholder.com/600x400?text=News+Image";
 
   return (
-    <section className="py-12 bg-gradient-to-b from-white to-gray-50">
+    <section className="pt-12">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center">
             <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
-            <h2 className="text-2xl font-bold text-pccc-dark">Tin tức nổi bật trong tuần</h2>
+            <h2 className="text-2xl font-bold text-pccc-dark dark:text-white">Tin tức nổi bật trong tuần</h2>
           </div>
           <div className="flex space-x-3">
             <button
@@ -137,11 +137,11 @@ const FeaturedNewsCarousel = () => {
           </div>
         </div>
         
-        <div className="border border-gray-100 rounded-xl p-4 bg-white/50">
+        <div className="border border-gray-100 dark:border-gray-700 rounded-xl p-4 bg-white/50 dark:bg-gray-800/50">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Main featured news slider - left side (2/3 width on large screens) */}
             <div className="lg:col-span-2">
-              <div className="space-y-3 rounded-xl p-5 bg-white h-full flex flex-col">
+              <div className="space-y-3 rounded-xl p-5 bg-white dark:bg-gray-800 h-full flex flex-col">
                 <div className="relative overflow-hidden rounded-xl aspect-[16/9] flex-grow mb-1">
                   {featuredNews.map((news, index) => (
                     <Link 
@@ -226,17 +226,17 @@ const FeaturedNewsCarousel = () => {
             
             {/* Latest news section - right side (1/3 width on large screens) */}
             <div className="lg:col-span-1">
-              <div className="bg-white rounded-xl p-5 border border-gray-100 h-full flex flex-col">
-                <h3 className="text-lg font-bold mb-4 border-b border-gray-100 pb-3 text-pccc-dark">Bài đăng gần nhất</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-100 dark:border-gray-700 h-full flex flex-col">
+                <h3 className="text-lg font-bold mb-4 border-b border-gray-100 dark:border-gray-700 pb-3 text-pccc-dark dark:text-white">Bài đăng gần nhất</h3>
                 <div className="space-y-4 flex-grow">
                   {recentPosts.map((news) => (
-                    <Card key={news.id} className="bg-white border-gray-100 hover:shadow-sm transition-shadow duration-300">
+                    <Card key={news.id} className="bg-white dark:bg-gray-800 border-gray-100 dark:border-gray-700 hover:shadow-sm dark:hover:shadow-gray-700/50 transition-shadow duration-300">
                       <CardContent className="p-4">
                         <Link to={news.slug} className="block hover:text-pccc-primary transition-colors duration-300">
                           <div className="flex flex-col">
-                            <span className="text-xs font-medium text-gray-500 mb-1 uppercase">{news.category}</span>
-                            <h4 className="text-sm font-semibold line-clamp-2 mb-1.5">{news.title}</h4>
-                            <span className="text-xs text-gray-400 flex items-center">
+                            <span className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-1 uppercase">{news.category}</span>
+                            <h4 className="text-sm font-semibold line-clamp-2 mb-1.5 dark:text-gray-200 hover:text-pccc-primary dark:hover:text-pccc-primary transition-colors">{news.title}</h4>
+                            <span className="text-xs text-gray-400 dark:text-gray-500 flex items-center">
                               <CalendarIcon className="h-3 w-3 mr-1" />
                               {news.date}
                             </span>

@@ -1,17 +1,17 @@
 import { Link } from "react-router-dom";
 const Footer = () => {
-  return <footer className="bg-pccc-dark text-white py-10">
+  return <footer className="bg-pccc-dark text-white py-10 dark:bg-gray-950">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold mb-4">PCCC40</h3>
-            <p className="text-sm">
+            <h3 className="text-xl font-bold mb-4 text-white">PCCC40</h3>
+            <p className="text-sm text-gray-300">
               Cổng thông tin điện tử về phòng cháy chữa cháy, cung cấp tin tức, kiến thức và văn bản pháp luật mới nhất.
             </p>
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Liên kết nhanh</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Liên kết nhanh</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-300 hover:text-white text-sm">Trang chủ</Link></li>
               <li><Link to="/tin-tuc" className="text-gray-300 hover:text-white text-sm">Tin tức PCCC</Link></li>
@@ -21,7 +21,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Thông tin hữu ích</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Thông tin hữu ích</h3>
             <ul className="space-y-2">
               <li><Link to="/thu-tuc-hanh-chinh" className="text-gray-300 hover:text-white text-sm">Thủ tục hành chính</Link></li>
               <li><Link to="/huong-dan-nghiep-vu" className="text-gray-300 hover:text-white text-sm">Hướng dẫn nghiệp vụ</Link></li>
@@ -31,7 +31,7 @@ const Footer = () => {
           </div>
           
           <div>
-            <h3 className="text-lg font-semibold mb-4">Liên hệ</h3>
+            <h3 className="text-lg font-semibold mb-4 text-white">Liên hệ</h3>
             <address className="not-italic text-sm text-gray-300">
               <p>Số 1 Sala, Quận 2</p>
               <p>Hồ Chí Minh, Việt Nam</p>

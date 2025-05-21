@@ -51,7 +51,7 @@ const VideoCard = ({ video }: VideoCardProps) => {
   };
   
   return (
-    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md border border-gray-100 rounded-xl">
+    <Card className="overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-pccc-primary/20 border border-gray-100 dark:border-gray-700 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 rounded-xl">
       <CardContent className="p-0">
         <Link to={`/video/${video.slug}`}>
           <div className="relative">

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
+import DetailPageLayout from '@/components/layouts/DetailPageLayout';
 import { 
   latestNews, 
   communityGuides, 
@@ -106,7 +107,7 @@ const NewsDetail = () => {
             <div className="animate-pulse space-y-6">
               <div className="h-8 bg-gray-200 rounded w-1/3"></div>
               <div className="h-96 bg-gray-200 rounded"></div>
-              <div className="space-y-3">
+              <div className="space-y-6 bg-gray-50 dark:bg-gray-800 p-6 rounded-lg">
                 <div className="h-4 bg-gray-200 rounded w-full"></div>
                 <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                 <div className="h-4 bg-gray-200 rounded w-4/6"></div>
@@ -138,15 +139,14 @@ const NewsDetail = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <Breadcrumbs />
-      <main className="flex-grow py-10">
+    <DetailPageLayout>
+      <div className="bg-white dark:bg-gray-800 py-8">
         <div className="container mx-auto px-4">
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Main content */}
             <div className="lg:col-span-2">
-              <Card className="overflow-hidden">
+              <Card className="overflow-hidden bg-white dark:bg-gray-800 shadow-sm border border-gray-100 dark:border-gray-700">
                 <CardContent className="p-0">
                   <img 
                     src={article.thumbnailUrl} 
@@ -160,7 +160,7 @@ const NewsDetail = () => {
                     </div>
                     <h1 className="text-3xl font-bold mb-6">{article.title}</h1>
                     
-                    <div className="prose max-w-none">
+                    <div className="prose max-w-none text-gray-700 dark:text-gray-300">
                       {article.content ? (
                         <EditorContent content={article.content} className="mt-6" />
                       ) : (
@@ -209,10 +209,10 @@ const NewsDetail = () => {
             </div>
             
             {/* Sidebar */}
-            <div>
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <h3 className="text-xl font-bold mb-4">Bài viết liên quan</h3>
+            <div className="space-y-6 sticky top-4">
+              <Card className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-lg">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Bài viết liên quan</h3>
                   <div className="space-y-4">
                     {relatedNews.map(newsItem => (
                       <div key={newsItem.id} className="border-b pb-4 last:border-0">
@@ -231,37 +231,37 @@ const NewsDetail = () => {
                 </CardContent>
               </Card>
               
-              <Card>
-                <CardContent className="p-4">
-                  <h3 className="text-xl font-bold mb-4">Danh mục tin</h3>
+              <Card className="bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 shadow-sm rounded-lg mt-6">
+                <CardContent className="p-6">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-800 dark:text-white">Danh mục tin</h3>
                   <ul className="space-y-2">
                     <li>
-                      <Link to="/tin-tuc-pccc" className="text-gray-700 hover:text-pccc-primary">Tin tức PCCC</Link>
+                      <Link to="/tin-tuc-pccc" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Tin tức PCCC</Link>
                     </li>
                     <li>
-                      <Link to="/huong-dan-cong-dong" className="text-gray-700 hover:text-pccc-primary">Hướng dẫn cộng đồng</Link>
+                      <Link to="/huong-dan-cong-dong" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Hướng dẫn cộng đồng</Link>
                     </li>
                     <li>
-                      <Link to="/van-ban-phap-quy" className="text-gray-700 hover:text-pccc-primary">Văn bản pháp quy</Link>
+                      <Link to="/van-ban-phap-quy" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Văn bản pháp quy</Link>
                     </li>
                     <li>
-                      <Link to="/thu-tuc-hanh-chinh" className="text-gray-700 hover:text-pccc-primary">Thủ tục hành chính</Link>
+                      <Link to="/thu-tuc-hanh-chinh" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Thủ tục hành chính</Link>
                     </li>
                     <li>
-                      <Link to="/huong-dan-nghiep-vu" className="text-gray-700 hover:text-pccc-primary">Hướng dẫn nghiệp vụ</Link>
+                      <Link to="/huong-dan-nghiep-vu" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Hướng dẫn nghiệp vụ</Link>
                     </li>
                     <li>
-                      <Link to="/nghien-cuu-trao-doi" className="text-gray-700 hover:text-pccc-primary">Nghiên cứu - Trao đổi</Link>
+                      <Link to="/nghien-cuu-trao-doi" className="text-gray-500 hover:text-pccc-primary dark:text-gray-400 dark:hover:text-pccc-primary">Nghiên cứu - Trao đổi</Link>
                     </li>
                   </ul>
                 </CardContent>
               </Card>
             </div>
           </div>
+          </div>
         </div>
-      </main>
-      <Footer />
-    </div>
+      </div>
+    </DetailPageLayout>
   );
 };
 
