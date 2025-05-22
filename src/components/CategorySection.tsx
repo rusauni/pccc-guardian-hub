@@ -45,11 +45,13 @@ const CategorySection = ({
     title: post.title,
     slug: post.slug,
     thumbnail: post.thumbnailUrl,
+    thumbnailUrl: post.thumbnailUrl,
     summary: post.summary,
     date_created: post.date_created,
     category: {
-      name: post.category?.name || '',
-      slug: post.category?.slug || ''
+      name: post.category?.name || title,
+      slug: post.category?.slug || categorySlug,
+      id: post.category?.id
     }
   }));
 

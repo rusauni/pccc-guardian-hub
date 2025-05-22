@@ -18,6 +18,7 @@ import ProceduresPage from "./pages/ProceduresPage";
 import NewsPage from "./pages/NewsPage";
 import CommunityGuidelinesPage from "./pages/CommunityGuidelinesPage";
 import ProfessionalSkillsPage from "./pages/ProfessionalSkillsPage";
+import ResearchPage from "./pages/ResearchPage";
 import { TestEditor } from "./pages/TestEditor";
 
 // Create a client
@@ -48,7 +49,7 @@ const App = () => {
               <Route path="/thu-tuc-hanh-chinh" element={<ProceduresPage />} />
               <Route path="/tai-lieu" element={<NewsCategory />} />
               <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
-              <Route path="/nghien-cuu-trao-doi" element={<NewsCategory />} />
+              <Route path="/nghien-cuu-trao-doi" element={<ResearchPage />} />
               <Route path="/video" element={<VideoPage />} />
               <Route path="/auth" element={<AuthDemo />} />
               <Route path="/:category/:id" element={<NewsDetail />} />

@@ -8,9 +8,9 @@ import { getPostsByCategorySlug } from '@/repository/GetPostByCategorySlug';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const CommunityGuidelinesPage = () => {
+const ResearchPage = () => {
   const { slug } = useParams<{ slug?: string }>();
-  const [communityGuidelines, setCommunityGuidelines] = useState<NewsItem[]>([]);
+  const [researchArticles, setResearchArticles] = useState<NewsItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
@@ -20,8 +20,8 @@ const CommunityGuidelinesPage = () => {
       setIsLoading(true);
       setError(null);
       
-      // Use the slug from URL or fallback to 'huong-dan-cong-dong'
-      const categorySlug = slug || 'huong-dan-cong-dong';
+      // Use the slug from URL or fallback to 'nghien-cuu-trao-doi'
+      const categorySlug = slug || 'nghien-cuu-trao-doi';
       const posts = await getPostsByCategorySlug(categorySlug);
       
       // Map the API response to match NewsItem type
@@ -35,13 +35,13 @@ const CommunityGuidelinesPage = () => {
         date_created: post.date_created,
         date_updated: post.date_updated,
         category: {
-          name: post.category?.name || 'Hướng dẫn cộng đồng',
+          name: post.category?.name || 'Nghiên cứu - Trao đổi',
           slug: post.category?.slug || categorySlug,
           id: post.category?.id
         }
       }));
       
-      setCommunityGuidelines(mappedNews);
+      setResearchArticles(mappedNews);
     } catch (err) {
       console.error('Error fetching news:', err);
       setError('Không thể tải dữ liệu. Vui lòng thử lại sau.');
@@ -54,7 +54,7 @@ const CommunityGuidelinesPage = () => {
     fetchNews();
   }, [slug, retryCount]); // Refetch when slug changes or on retry
 
-  if (isLoading && communityGuidelines.length === 0) {
+  if (isLoading && researchArticles.length === 0) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
         <Navbar />
@@ -71,7 +71,7 @@ const CommunityGuidelinesPage = () => {
     );
   }
 
-  if (error && communityGuidelines.length === 0) {
+  if (error && researchArticles.length === 0) {
     return (
       <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
         <Navbar />
@@ -103,17 +103,17 @@ const CommunityGuidelinesPage = () => {
           <div className="flex items-center mb-8">
             <div className="w-1.5 h-7 bg-pccc-primary mr-3 rounded-sm"></div>
             <h1 className="text-2xl font-bold text-pccc-dark dark:text-white">
-              Hướng dẫn cộng đồng
+              Nghiên cứu - Trao đổi
             </h1>
           </div>
           
-          {isLoading && communityGuidelines.length > 0 && (
+          {isLoading && researchArticles.length > 0 && (
             <div className="flex justify-center py-8">
               <Loader2 className="h-8 w-8 animate-spin text-pccc-primary" />
             </div>
           )}
           
-          {error && communityGuidelines.length > 0 && (
+          {error && researchArticles.length > 0 && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
               <div className="flex">
                 <div className="flex-shrink-0">
@@ -137,7 +137,7 @@ const CommunityGuidelinesPage = () => {
           )}
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {communityGuidelines.map((item) => (
+            {researchArticles.map((item) => (
               <div key={item.id} className="overflow-hidden transition-all duration-300 border border-gray-100 rounded-xl dark:border-gray-700 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 hover:shadow-md dark:hover:shadow-pccc-primary/20">
                 <div className="aspect-w-16 aspect-h-9">
                   <img 
@@ -163,7 +163,7 @@ const CommunityGuidelinesPage = () => {
                   </p>
                   <div className="flex justify-between items-center">
                     <span className="inline-block bg-gray-100 dark:bg-gray-700 text-xs px-2 py-1 rounded-full">
-                      {item.category?.name || 'Hướng dẫn cộng đồng'}
+                      {item.category?.name || 'Nghiên cứu - Trao đổi'}
                     </span>
                     <a 
                       href={`/${item.category.slug}/${item.slug}`}
@@ -180,7 +180,7 @@ const CommunityGuidelinesPage = () => {
             ))}
           </div>
           
-          {communityGuidelines.length === 0 && !isLoading && !error && (
+          {researchArticles.length === 0 && !isLoading && !error && (
             <div className="text-center py-12">
               <p className="text-gray-500 dark:text-gray-400">Không có bài viết nào được tìm thấy.</p>
             </div>
@@ -192,18 +192,4 @@ const CommunityGuidelinesPage = () => {
   );
 };
 
-// Community guideline titles
-const communityTitles = [
-  "Hướng dẫn sử dụng bình chữa cháy đúng cách",
-  "Cách lựa chọn và lắp đặt thiết bị báo cháy cho hộ gia đình",
-  "Lập kế hoạch thoát nạn cho gia đình khi có hỏa hoạn",
-  "Kiến thức cơ bản về nguyên nhân gây cháy và cách phòng tránh",
-  "Hướng dẫn sơ cứu nạn nhân trong vụ cháy",
-  "Biện pháp phòng cháy cho khu chung cư cao tầng",
-  "Chuẩn bị túi thoát hiểm khi xảy ra hỏa hoạn",
-  "Các kỹ năng thoát nạn khi gặp khói và lửa",
-  "Hướng dẫn sử dụng thang dây thoát hiểm",
-  "An toàn PCCC khi sử dụng thiết bị điện trong gia đình"
-];
-
-export default CommunityGuidelinesPage; 
+export default ResearchPage;
