@@ -1,7 +1,8 @@
+import { useState } from 'react';
 import { Play } from 'lucide-react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Link } from 'react-router-dom';
+import VideoPlayer from './VideoPlayer';
 
 // Calendar icon component
 const CalendarIcon = ({ className }: { className?: string }) => (
@@ -25,10 +26,11 @@ const CalendarIcon = ({ className }: { className?: string }) => (
 interface VideoItem {
   id: number;
   title: string;
-  thumbnail: string;
+  thumbnail?: string;
   thumbnailUrl: string;
   date_created: string;
-  slug: string;
+  slug?: string;
+  videoUrl: string;
   category: {
     name: string;
     slug: string;
@@ -41,6 +43,8 @@ interface VideoCardProps {
 }
 
 const VideoCard = ({ video }: VideoCardProps) => {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+  
   // Sử dụng ảnh placeholder nếu thumbnail không tồn tại hoặc bị lỗi
   const fallbackImage = "https://via.placeholder.com/400x300?text=Video+Thumbnail";
   
@@ -50,10 +54,18 @@ const VideoCard = ({ video }: VideoCardProps) => {
     return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
   };
   
+  const handleOpenVideo = () => {
+    setIsVideoOpen(true);
+  };
+  
+  const handleCloseVideo = () => {
+    setIsVideoOpen(false);
+  };
+  
   return (
     <Card className="overflow-hidden transition-all duration-300 hover:shadow-md dark:hover:shadow-pccc-primary/20 border border-gray-100 dark:border-gray-700 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-gray-800 rounded-xl">
       <CardContent className="p-0">
-        <Link to={`/video/${video.slug}`}>
+        <div onClick={handleOpenVideo} className="cursor-pointer">
           <div className="relative">
             <img
               src={video.thumbnailUrl || fallbackImage}
@@ -81,7 +93,14 @@ const VideoCard = ({ video }: VideoCardProps) => {
               <span>{formatDate(video.date_created)}</span>
             </div>
           </div>
-        </Link>
+        </div>
+        
+        {/* Video Player Dialog */}
+        <VideoPlayer 
+          isOpen={isVideoOpen} 
+          onClose={handleCloseVideo} 
+          videoUrl={video.videoUrl || "https://youtu.be/oDvLKQ9Kl44?si=CD-GlxxBa_mPP_Cq"}
+        />
       </CardContent>
     </Card>
   );

@@ -361,6 +361,7 @@ export const videos = [
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     date_created: "2025-05-15T08:00:00.000Z",
     slug: "huong-dan-su-dung-binh-chua-chay",
+    videoUrl: "https://youtu.be/oDvLKQ9Kl44?si=CD-GlxxBa_mPP_Cq",
     category: {
       name: "Video hướng dẫn",
       slug: "video",
@@ -374,6 +375,7 @@ export const videos = [
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     date_created: "2025-03-18T11:30:00.000Z",
     slug: "ky-nang-thoat-hiem-khi-co-dam-chay-trong-nha-cao-tang",
+    videoUrl: "https://youtu.be/oDvLKQ9Kl44?si=CD-GlxxBa_mPP_Cq",
     category: {
       name: "Video hướng dẫn",
       slug: "video",
@@ -387,6 +389,7 @@ export const videos = [
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     date_created: "2025-03-15T09:15:00.000Z",
     slug: "thuc-hanh-so-cap-cuu-nan-nhan-hoa-hoan",
+    videoUrl: "https://youtu.be/oDvLKQ9Kl44?si=CD-GlxxBa_mPP_Cq",
     category: {
       name: "Video hướng dẫn",
       slug: "video",
@@ -400,6 +403,7 @@ export const videos = [
     thumbnailUrl: "https://images.unsplash.com/photo-1599353229998-484ff1334dfd",
     date_created: "2025-03-12T13:45:00.000Z",
     slug: "dien-tap-pccc-quy-mo-lon-tai-khu-cong-nghiep",
+    videoUrl: "https://youtu.be/oDvLKQ9Kl44?si=CD-GlxxBa_mPP_Cq",
     category: {
       name: "Video hướng dẫn",
       slug: "video",
