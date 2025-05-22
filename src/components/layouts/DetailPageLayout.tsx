@@ -22,14 +22,14 @@ interface DetailPageLayoutProps {
     summary?: string;
   };
   relatedNews?: Array<{
-    id: number;
+    id: string | number;
     title: string;
     slug: string;
     category: {
       name: string;
       slug: string;
     };
-    date_created: string;
+    date_created?: string;
   }>;
   categories?: Array<{
     name: string;
