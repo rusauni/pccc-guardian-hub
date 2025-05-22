@@ -93,9 +93,9 @@ const NewsDetail = () => {
                     .filter(post => post.id !== formattedArticle.id)
                     .slice(0, 5);
                   
-                  // Transform Post[] to NewsItem[]
-                  const relatedNewsItems: NewsItem[] = filteredRelated.map(post => ({
-                    id: post.id,
+                  // Transform Post[] to NewsItem[] ensuring id is always a number
+                  const relatedNewsItems = filteredRelated.map(post => ({
+                    id: post.id, // This is guaranteed to be a number from the Post interface
                     title: post.title,
                     slug: post.slug,
                     thumbnail: post.thumbnail || '',
