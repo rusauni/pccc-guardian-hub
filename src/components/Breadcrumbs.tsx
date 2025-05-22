@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import {
   Breadcrumb,
@@ -35,18 +35,20 @@ export function Breadcrumbs() {
           
           {/* Dynamically generated breadcrumb items */}
           {breadcrumbItems.map((item, index) => (
-            <BreadcrumbItem key={index}>
-              {index === breadcrumbItems.length - 1 ? (
-                <BreadcrumbPage>{item.name}</BreadcrumbPage>
-              ) : (
-                <>
+            <React.Fragment key={index}>
+              <BreadcrumbItem>
+                {index === breadcrumbItems.length - 1 ? (
+                  <BreadcrumbPage>{item.name}</BreadcrumbPage>
+                ) : (
                   <BreadcrumbLink asChild>
                     <Link to={item.href}>{item.name}</Link>
                   </BreadcrumbLink>
-                  <BreadcrumbSeparator />
-                </>
-              )}
-            </BreadcrumbItem>
+                )}
+              </BreadcrumbItem>
+              
+              {/* Add separator after each item except the last one */}
+              {index < breadcrumbItems.length - 1 && <BreadcrumbSeparator />}
+            </React.Fragment>
           ))}
         </BreadcrumbList>
       </Breadcrumb>
