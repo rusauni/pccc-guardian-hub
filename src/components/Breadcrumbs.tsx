@@ -61,6 +61,17 @@ function generateBreadcrumbItems(pathnames: string[], navigation: NavItem[]): Ar
   // Build breadcrumb path based on current route
   let currentPath = '';
   
+    // For news posts, only show 'Trang chủ > Tin tức PCCC'
+  if (pathnames[0] === 'tin-tuc-pccc' || (pathnames[0] === 'tin-tuc' && pathnames.length > 1)) {
+    // Add News category
+    const newsItem = navigation.find(item => item.href === '/tin-tuc-pccc');
+    if (newsItem) {
+      result.push({ name: newsItem.name, href: '/tin-tuc-pccc' });
+    }
+    return result;
+  }
+  
+  // Default handling for other routes
   for (const segment of pathnames) {
     currentPath += `/${segment}`;
     

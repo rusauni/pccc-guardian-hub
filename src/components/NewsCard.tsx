@@ -23,18 +23,20 @@ const CalendarIcon = ({ className }: { className?: string }) => (
 );
 
 export interface NewsItem {
-  id: number;
+  id: string | number;
   title: string;
   slug: string;
-  thumbnail: string;
-  thumbnailUrl: string;
+  thumbnail?: string;
+  thumbnailUrl?: string;
   summary: string;
-  date_updated: string;
+  date?: string;
+  date_created?: string;
+  date_updated?: string;
   content?: any; // EditorJS content
   category: {
     name: string;
     slug: string;
-    id: number;
+    id?: number;
   };
 }
 
@@ -45,12 +47,35 @@ interface NewsCardProps {
 
 const NewsCard = ({ news, showExcerpt = false }: NewsCardProps) => {
   // Sử dụng ảnh placeholder nếu thumbnailUrl không tồn tại hoặc bị lỗi
-  const fallbackImage = "https://via.placeholder.com/400x300?text=News+Thumbnail";
+  const fallbackImage = "https://img.cand.com.vn/resize/800x800/NewFiles/Images/2022/08/05/2_cuoi_02-1659668776146.jpg";
   
-  // Format date
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  // Format date with fallback handling
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return 'N/A';
+    
+    try {
+      // Parse the ISO 8601 date string
+      const date = new Date(dateString);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) {
+        console.warn('Invalid date string:', dateString);
+        return 'N/A';
+      }
+      
+      // Convert to Vietnam timezone (UTC+7)
+      const options: Intl.DateTimeFormatOptions = { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric',
+        timeZone: 'Asia/Ho_Chi_Minh'
+      };
+      
+      return date.toLocaleDateString('vi-VN', options);
+    } catch (error) {
+      console.error('Error formatting date:', error, 'Date string:', dateString);
+      return 'N/A';
+    }
   };
 
   return (
@@ -60,7 +85,7 @@ const NewsCard = ({ news, showExcerpt = false }: NewsCardProps) => {
           <div className="relative">
             <AspectRatio ratio={16 / 9}>
               <img
-                src={news.thumbnailUrl || fallbackImage}
+                src={news.thumbnail || news.thumbnailUrl || fallbackImage}
                 alt={news.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
@@ -81,7 +106,7 @@ const NewsCard = ({ news, showExcerpt = false }: NewsCardProps) => {
             )}
             <div className="flex items-center text-sm text-gray-400">
               <CalendarIcon className="h-3.5 w-3.5 mr-1.5" />
-              <span>{formatDate(news.date_updated)}</span>
+              <span>{formatDate(news.date_created || news.date_updated)}</span>
             </div>
           </div>
         </Link>

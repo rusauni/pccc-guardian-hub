@@ -1,15 +1,67 @@
 import { Link } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
+import { useEffect, useState } from "react";
 import NewsCard, { NewsItem } from "./NewsCard";
 import { Button } from "@/components/ui/button";
+import { getPostsByCategorySug, Post } from "@/repository/GetPostByCategorySug";
 
 interface CategorySectionProps {
   title: string;
-  news: NewsItem[];
+  categorySlug: string;
   categoryUrl: string;
+  limit?: number;
 }
 
-const CategorySection = ({ title, news, categoryUrl }: CategorySectionProps) => {
+const CategorySection = ({ 
+  title, 
+  categorySlug, 
+  categoryUrl, 
+  limit = 4 
+}: CategorySectionProps) => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setIsLoading(true);
+        const data = await getPostsByCategorySug(categorySlug, limit);
+        setPosts(data);
+      } catch (err) {
+        console.error('Error fetching posts:', err);
+        setError('Không thể tải dữ liệu. Vui lòng thử lại sau.');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPosts();
+  }, [categorySlug, limit]);
+
+  // Map the API response to match NewsItem type
+  const newsItems: NewsItem[] = posts.map(post => ({
+    id: post.id.toString(),
+    title: post.title,
+    slug: post.slug,
+    thumbnail: post.thumbnailUrl,
+    summary: post.summary,
+    date_created: post.date_created,
+    category: {
+      name: post.category?.name || '',
+      slug: post.category?.slug || ''
+    }
+  }));
+
+  if (error) {
+    return (
+      <section className="category-section container mx-auto px-4 py-10">
+        <div className="text-center text-red-500">{error}</div>
+      </section>
+    );
+  }
+
+
   return (
     <section className="category-section container mx-auto px-4 py-10">
       <div className="flex justify-between items-center mb-8">
@@ -24,11 +76,17 @@ const CategorySection = ({ title, news, categoryUrl }: CategorySectionProps) => 
         </Link>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        {news.map((item) => (
-          <NewsCard key={item.id} news={item} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex justify-center items-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-pccc-primary" />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {newsItems.map((item) => (
+            <NewsCard key={item.id} news={item} />
+          ))}
+        </div>
+      )}
     </section>
   );
 };

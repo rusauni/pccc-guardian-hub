@@ -16,7 +16,7 @@ import {
 
 const getCategoryData = (category: string) => {
   switch (category) {
-    case 'tin-tuc':
+    case 'tin-tuc-pccc':
       return { title: 'Tin tức PCCC', data: latestNews };
     case 'huong-dan-cong-dong':
       return { title: 'Hướng dẫn cộng đồng', data: communityGuides };
@@ -25,7 +25,7 @@ const getCategoryData = (category: string) => {
     case 'huong-dan':
       return { title: 'Hướng dẫn', data: [...communityGuides, ...professionalGuides] };
     case 'van-ban-phap-quy':
-      return { title: 'Văn bản pháp quy', data: regulations };
+      return { title: 'Nghiên cứu - Trao đổi', data: research };
     case 'thu-tuc-hanh-chinh':
       return { title: 'Thủ tục hành chính', data: procedures };
     case 'nghien-cuu-trao-doi':

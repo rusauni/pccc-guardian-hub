@@ -20,18 +20,25 @@ const Index = () => {
         {/* Featured News Carousel with Latest News */}
         <FeaturedNewsCarousel />
         
+        {/* PCCC News Section */}
+        <CategorySection 
+          title="Tin Tức PCCC" 
+          categorySlug="tin-tuc-pccc"
+          categoryUrl="/tin-tuc-pccc" 
+        />
+        
         {/* Community Guides Section */}
         <CategorySection 
           title="Hướng dẫn cộng đồng" 
-          news={communityGuides}
+          categorySlug="huong-dan-cong-dong"
           categoryUrl="/huong-dan-cong-dong" 
         />
         
-        {/* Regulations Section */}
+        {/* Research & Discussion Section */}
         <CategorySection 
-          title="Văn bản pháp quy" 
-          news={regulations}
-          categoryUrl="/van-ban-phap-quy" 
+          title="Nghiên cứu - Trao đổi" 
+          categorySlug="nghien-cuu-trao-doi"
+          categoryUrl="/nghien-cuu-trao-doi" 
         />
         
         {/* Videos Section */}
