@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import NewsCard from '@/components/NewsCard';
+import { LegalDocumentsTable } from '@/components/LegalDocumentsTable';
 import { Breadcrumbs } from '@/components/Breadcrumbs';
 import { 
   latestNews, 
@@ -25,7 +26,7 @@ const getCategoryData = (category: string) => {
     case 'huong-dan':
       return { title: 'Hướng dẫn', data: [...communityGuides, ...professionalGuides] };
     case 'van-ban-phap-quy':
-      return { title: 'Nghiên cứu - Trao đổi', data: research };
+      return { title: 'Văn bản pháp quy', data: [] }; // Empty data array since we'll use the table
     case 'thu-tuc-hanh-chinh':
       return { title: 'Thủ tục hành chính', data: procedures };
     case 'nghien-cuu-trao-doi':
@@ -39,7 +40,9 @@ const getCategoryData = (category: string) => {
 
 const NewsCategory = () => {
   const { category } = useParams<{ category: string }>();
-  const { title, data } = getCategoryData(category || '');
+  const pathname = window.location.pathname;
+  const categoryValue = pathname === '/van-ban-phap-quy' ? 'van-ban-phap-quy' : category || '';
+  const { title, data } = getCategoryData(categoryValue);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -52,11 +55,15 @@ const NewsCategory = () => {
             <h1 className="text-2xl font-bold text-pccc-dark dark:text-white">{title}</h1>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {data.map((item) => (
-              <NewsCard key={item.id} news={item} showExcerpt={true} />
-            ))}
-          </div>
+          {categoryValue === 'van-ban-phap-quy' ? (
+            <LegalDocumentsTable />
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {data.map((item) => (
+                <NewsCard key={item.id} news={item} showExcerpt={true} />
+              ))}
+            </div>
+          )}
         </div>
       </main>
       <Footer />

@@ -49,6 +49,7 @@ const App = () => {
               <Route path="/thu-tuc-hanh-chinh" element={<ProceduresPage />} />
               <Route path="/tai-lieu" element={<NewsCategory />} />
               <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
+              <Route path="/:category" element={<NewsCategory />} />
               <Route path="/nghien-cuu-trao-doi" element={<ResearchPage />} />
               <Route path="/video" element={<VideoPage />} />
               <Route path="/auth" element={<AuthDemo />} />
