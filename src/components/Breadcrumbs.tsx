@@ -63,7 +63,7 @@ function generateBreadcrumbItems(pathnames: string[], navigation: NavItem[]): Ar
   // Build breadcrumb path based on current route
   let currentPath = '';
   
-    // For news posts, only show 'Trang chủ > Tin tức PCCC'
+  // For news posts, only show 'Trang chủ > Tin tức PCCC'
   if (pathnames[0] === 'tin-tuc-pccc' || (pathnames[0] === 'tin-tuc' && pathnames.length > 1)) {
     // Add News category
     const newsItem = navigation.find(item => item.href === '/tin-tuc-pccc');
@@ -71,6 +71,25 @@ function generateBreadcrumbItems(pathnames: string[], navigation: NavItem[]): Ar
       result.push({ name: newsItem.name, href: '/tin-tuc-pccc' });
     }
     return result;
+  }
+  
+  // Special case for 'Văn bản pháp quy' to ensure consistent breadcrumbs
+  if (pathnames.length === 1 && pathnames[0] === 'van-ban-phap-quy') {
+    // Find the 'Tài liệu' navigation item
+    const taiLieuItem = navigation.find(item => item.name === 'Tài liệu');
+    if (taiLieuItem) {
+      // Add 'Tài liệu' to breadcrumbs
+      result.push({ name: taiLieuItem.name, href: taiLieuItem.href });
+      
+      // Find the 'Văn bản pháp quy' submenu item
+      if (taiLieuItem.submenu) {
+        const vanBanItem = taiLieuItem.submenu.find(sub => sub.href === '/van-ban-phap-quy');
+        if (vanBanItem) {
+          result.push({ name: vanBanItem.name, href: vanBanItem.href });
+        }
+      }
+      return result;
+    }
   }
   
   // Default handling for other routes

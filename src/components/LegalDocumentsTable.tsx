@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, FileText, Loader2 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -36,6 +36,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
+import { Document, getAllDocuments } from "@/repository/GetAllDocuments"
 
 export interface LegalDocument {
   id: number
@@ -45,9 +46,32 @@ export interface LegalDocument {
   effectiveDate: string
   documentType: string
   status: 'active' | 'expired' | 'draft'
+  file?: string
+  fileUrl?: string
+  description?: string | null
 }
 
-const data: LegalDocument[] = [
+/**
+ * Maps an API Document to the UI LegalDocument model
+ */
+const mapDocumentToLegalDocument = (doc: Document): LegalDocument => {
+  // Set default status as 'active' (Còn hiệu lực)
+  return {
+    id: doc.id,
+    title: doc.title,
+    documentNumber: doc.document_number,
+    issuingAgency: doc.issuing_agency,
+    effectiveDate: doc.effective_date,
+    documentType: doc.document_type,
+    status: 'active', // Default status is 'active' (Còn hiệu lực)
+    file: doc.file,
+    fileUrl: doc.fileUrl,
+    description: doc.description
+  };
+};
+
+// Mock data for fallback
+const mockData: LegalDocument[] = [
   {
     id: 1,
     title: "Thông tư số 01/2024/TT-BCA quy định về phòng cháy chữa cháy",
@@ -453,9 +477,24 @@ export const columns: ColumnDef<LegalDocument>[] = [
             >
               Sao chép số hiệu văn bản
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Xem chi tiết</DropdownMenuItem>
-            <DropdownMenuItem>Tải xuống</DropdownMenuItem>
+            <DropdownMenuItem
+                  onClick={() => {
+                    if (row.original.fileUrl) {
+                      window.open(row.original.fileUrl, '_blank');
+                    }
+                  }}
+                  disabled={!row.original.fileUrl}
+                >
+                  <FileText className="mr-2 h-4 w-4" />
+                  Tải xuống
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  Xem chi tiết
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  Xóa
+                </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       )
@@ -465,9 +504,36 @@ export const columns: ColumnDef<LegalDocument>[] = [
 
 export function LegalDocumentsTable() {
   const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    []
+  )
+  const [columnVisibility, setColumnVisibility] =
+    React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
+  const [data, setData] = React.useState<LegalDocument[]>([])
+  const [loading, setLoading] = React.useState<boolean>(true)
+  const [error, setError] = React.useState<string | null>(null)
+
+  React.useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        setLoading(true);
+        const documents = await getAllDocuments();
+        const mappedDocuments = documents.map(mapDocumentToLegalDocument);
+        setData(mappedDocuments);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching legal documents:', err);
+        setError('Không thể tải dữ liệu văn bản pháp lý. Vui lòng thử lại sau.');
+        // Use mock data as fallback
+        setData(mockData);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
 
   const table = useReactTable({
     data,
@@ -490,15 +556,26 @@ export function LegalDocumentsTable() {
 
   return (
     <div className="w-full">
-      <div className="flex items-center py-4">
-        <Input
-          placeholder="Tìm kiếm văn bản..."
-          value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("title")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      {loading ? (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 className="h-8 w-8 animate-spin mr-2" />
+          <span>Đang tải dữ liệu văn bản...</span>
+        </div>
+      ) : error ? (
+        <div className="flex items-center justify-center py-8 text-red-500">
+          {error}
+        </div>
+      ) : (
+      <>
+        <div className="flex items-center py-4">
+          <Input
+            placeholder="Tìm kiếm văn bản..."
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            onChange={(event) =>
+              table.getColumn("title")?.setFilterValue(event.target.value)
+            }
+            className="max-w-sm"
+          />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
@@ -602,6 +679,8 @@ export function LegalDocumentsTable() {
           </Button>
         </div>
       </div>
+      </>
+      )}
     </div>
   )
 }
