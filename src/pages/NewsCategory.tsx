@@ -14,28 +14,32 @@ import {
   research, 
   videos 
 } from '@/data/mockData';
+import { getCategoryBySlug } from '@/data/categories';
 
-const getCategoryData = (category: string) => {
-  switch (category) {
-    case 'tin-tuc-pccc':
-      return { title: 'Tin tức PCCC', data: latestNews };
-    case 'huong-dan-cong-dong':
-      return { title: 'Hướng dẫn cộng đồng', data: communityGuides };
-    case 'huong-dan-nghiep-vu':
-      return { title: 'Hướng dẫn nghiệp vụ', data: professionalGuides };
-    case 'huong-dan':
-      return { title: 'Hướng dẫn', data: [...communityGuides, ...professionalGuides] };
-    case 'van-ban-phap-quy':
-      return { title: 'Văn bản pháp quy', data: [] }; // Empty data array since we'll use the table
-    case 'thu-tuc-hanh-chinh':
-      return { title: 'Thủ tục hành chính', data: procedures };
-    case 'nghien-cuu-trao-doi':
-      return { title: 'Nghiên cứu - Trao đổi', data: research };
-    case 'tai-lieu':
-      return { title: 'Tài liệu', data: [...regulations, ...research] };
-    default:
-      return { title: 'Danh mục', data: [] };
-  }
+const getCategoryData = (categorySlug: string) => {
+  // Get category from centralized data
+  const category = getCategoryBySlug(categorySlug);
+  const categoryName = category?.name || 'Danh mục';
+  
+  // Map category slug to its corresponding data
+  const categoryDataMap: Record<string, any[]> = {
+    'tin-tuc-pccc': latestNews,
+    'huong-dan-cong-dong': communityGuides,
+    'huong-dan-nghiep-vu': professionalGuides,
+    'huong-dan': [...communityGuides, ...professionalGuides],
+    'van-ban-phap-quy': [], // Empty data array since we'll use the table
+    'thu-tuc-hanh-chinh': procedures,
+    'nghien-cuu-trao-doi': research,
+    'tai-lieu': [...regulations, ...research],
+    'video-ky-nang-pccc': videos
+  };
+  
+  // Return the category data or empty array if not found
+  return { 
+    title: categoryName, 
+    data: categoryDataMap[categorySlug] || [] 
+  };
+
 };
 
 const NewsCategory = () => {
