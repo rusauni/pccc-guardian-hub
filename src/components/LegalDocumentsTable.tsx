@@ -13,7 +13,7 @@ import {
 } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { vi } from "date-fns/locale"
-import { ArrowUpDown, ChevronDown, MoreHorizontal, FileText, Loader2 } from "lucide-react"
+import { ArrowUpDown, ChevronDown, MoreHorizontal, FileText, Loader2, Eye } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -37,6 +37,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { Document, getAllDocuments } from "@/repository/GetAllDocuments"
+import { DocumentPreviewDialog } from "@/components/DocumentPreviewDialog"
 
 export interface LegalDocument {
   id: number
@@ -70,281 +71,38 @@ const mapDocumentToLegalDocument = (doc: Document): LegalDocument => {
   };
 };
 
-// Mock data for fallback
-const mockData: LegalDocument[] = [
-  {
-    id: 1,
-    title: "Thông tư số 01/2024/TT-BCA quy định về phòng cháy chữa cháy",
-    documentNumber: "01/2024/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2024-01-15",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 2,
-    title: "Nghị định số 136/2020/NĐ-CP quy định chi tiết một số điều của Luật Phòng cháy và chữa cháy",
-    documentNumber: "136/2020/NĐ-CP",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2020-12-31",
-    documentType: "Nghị định",
-    status: 'active'
-  },
-  {
-    id: 3,
-    title: "Thông tư liên tịch số 02/2023/TTLT-BCA-BXD hướng dẫn về phòng cháy chữa cháy đối với nhà và công trình",
-    documentNumber: "02/2023/TTLT-BCA-BXD",
-    issuingAgency: "Bộ Công an - Bộ Xây dựng",
-    effectiveDate: "2023-03-01",
-    documentType: "Thông tư liên tịch",
-    status: 'active'
-  },
-  {
-    id: 4,
-    title: "Nghị định số 79/2014/NĐ-CP quy định chi tiết thi hành một số điều của Luật Phòng cháy và chữa cháy",
-    documentNumber: "79/2014/NĐ-CP",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2014-08-15",
-    documentType: "Nghị định",
-    status: 'expired'
-  },
-  {
-    id: 5,
-    title: "Thông tư số 52/2014/TT-BCA quy định về kiểm định phương tiện phòng cháy chữa cháy",
-    documentNumber: "52/2014/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2014-11-20",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 6,
-    title: "Thông tư số 12/2022/TT-BCA hướng dẫn thi hành một số điều của Luật Phòng cháy và chữa cháy",
-    documentNumber: "12/2022/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2022-04-10",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 7,
-    title: "Nghị quyết số 25/2022/NQ-HĐND quy định mức thuế bảo vệ môi trường đối với nước thải công nghiệp",
-    documentNumber: "25/2022/NQ-HĐND",
-    issuingAgency: "HĐND Thành phố Hà Nội",
-    effectiveDate: "2022-07-01",
-    documentType: "Nghị quyết",
-    status: 'active'
-  },
-  {
-    id: 8,
-    title: "Chỉ thị số 09/CT-TTg về tăng cường công tác phòng cháy, chữa cháy mùa khô hanh",
-    documentNumber: "09/CT-TTg",
-    issuingAgency: "Thủ tướng Chính phủ",
-    effectiveDate: "2023-10-15",
-    documentType: "Chỉ thị",
-    status: 'active'
-  },
-  {
-    id: 9,
-    title: "Thông tư số 33/2019/TT-BTC hướng dẫn chế độ quản lý, sử dụng kinh phí hỗ trợ phòng cháy, chữa cháy",
-    documentNumber: "33/2019/TT-BTC",
-    issuingAgency: "Bộ Tài chính",
-    effectiveDate: "2019-12-31",
-    documentType: "Thông tư",
-    status: 'expired'
-  },
-  {
-    id: 10,
-    title: "Dự thảo Thông tư quy định về kiểm tra an toàn phòng cháy chữa cháy đối với cơ sở",
-    documentNumber: "Dự thảo",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2025-06-01",
-    documentType: "Dự thảo Thông tư",
-    status: 'draft'
-  },
-  {
-    id: 11,
-    title: "Quyết định số 08/2023/QĐ-TTg về quy định tiêu chuẩn phòng cháy chữa cháy cho nhà cao tầng",
-    documentNumber: "08/2023/QĐ-TTg",
-    issuingAgency: "Thủ tướng Chính phủ",
-    effectiveDate: "2023-05-20",
-    documentType: "Quyết định",
-    status: 'active'
-  },
-  {
-    id: 12,
-    title: "Thông tư số 15/2023/TT-BCA quy định về trang bị phương tiện phòng cháy chữa cháy cho lực lượng dân phòng",
-    documentNumber: "15/2023/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2023-07-15",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 13,
-    title: "Nghị định số 42/2022/NĐ-CP quy định xử phạt vi phạm hành chính trong lĩnh vực phòng cháy chữa cháy",
-    documentNumber: "42/2022/NĐ-CP",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2022-08-10",
-    documentType: "Nghị định",
-    status: 'active'
-  },
-  {
-    id: 14,
-    title: "Thông tư số 18/2021/TT-BXD về quy chuẩn kỹ thuật quốc gia về an toàn cháy cho nhà và công trình",
-    documentNumber: "18/2021/TT-BXD",
-    issuingAgency: "Bộ Xây dựng",
-    effectiveDate: "2021-11-01",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 15,
-    title: "Quyết định số 19/2020/QĐ-TTg về cơ chế hỗ trợ kinh phí phòng cháy chữa cháy cho các địa phương",
-    documentNumber: "19/2020/QĐ-TTg",
-    issuingAgency: "Thủ tướng Chính phủ",
-    effectiveDate: "2020-09-15",
-    documentType: "Quyết định",
-    status: 'expired'
-  },
-  {
-    id: 16,
-    title: "Thông tư số 22/2022/TT-BCA hướng dẫn công tác huấn luyện nghiệp vụ phòng cháy chữa cháy",
-    documentNumber: "22/2022/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2022-06-01",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 17,
-    title: "Nghị quyết số 31/2023/NQ-CP về tăng cường công tác phòng cháy chữa cháy tại các khu dân cư",
-    documentNumber: "31/2023/NQ-CP",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2023-09-10",
-    documentType: "Nghị quyết",
-    status: 'active'
-  },
-  {
-    id: 18,
-    title: "Dự thảo Nghị định về quản lý hoạt động kinh doanh dịch vụ phòng cháy chữa cháy",
-    documentNumber: "Dự thảo",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2025-01-01",
-    documentType: "Dự thảo Nghị định",
-    status: 'draft'
-  },
-  {
-    id: 19,
-    title: "Thông tư số 05/2018/TT-BCA quy định về trang phục chữa cháy của lực lượng phòng cháy chữa cháy",
-    documentNumber: "05/2018/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2018-03-15",
-    documentType: "Thông tư",
-    status: 'expired'
-  },
-  {
-    id: 20,
-    title: "Quyết định số 27/2023/QĐ-UBND về quy định phòng cháy chữa cháy đối với chợ và trung tâm thương mại",
-    documentNumber: "27/2023/QĐ-UBND",
-    issuingAgency: "UBND Thành phố Hồ Chí Minh",
-    effectiveDate: "2023-08-01",
-    documentType: "Quyết định",
-    status: 'active'
-  },
-  {
-    id: 21,
-    title: "Thông tư liên tịch số 07/2022/TTLT-BCA-BYT về quy định phòng cháy chữa cháy tại các cơ sở y tế",
-    documentNumber: "07/2022/TTLT-BCA-BYT",
-    issuingAgency: "Bộ Công an - Bộ Y tế",
-    effectiveDate: "2022-05-10",
-    documentType: "Thông tư liên tịch",
-    status: 'active'
-  },
-  {
-    id: 22,
-    title: "Nghị định số 83/2017/NĐ-CP về công tác cứu nạn, cứu hộ của lực lượng phòng cháy chữa cháy",
-    documentNumber: "83/2017/NĐ-CP",
-    issuingAgency: "Chính phủ",
-    effectiveDate: "2017-07-31",
-    documentType: "Nghị định",
-    status: 'expired'
-  },
-  {
-    id: 23,
-    title: "Thông tư số 29/2024/TT-BCA quy định về trang bị phương tiện phòng cháy chữa cháy cho cơ sở sản xuất",
-    documentNumber: "29/2024/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2024-03-01",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 24,
-    title: "Chỉ thị số 17/2023/CT-TTg về tăng cường công tác thanh tra, kiểm tra phòng cháy chữa cháy",
-    documentNumber: "17/2023/CT-TTg",
-    issuingAgency: "Thủ tướng Chính phủ",
-    effectiveDate: "2023-11-15",
-    documentType: "Chỉ thị",
-    status: 'active'
-  },
-  {
-    id: 25,
-    title: "Quyết định số 35/2021/QĐ-UBND về quy định phòng cháy chữa cháy tại các khu công nghiệp",
-    documentNumber: "35/2021/QĐ-UBND",
-    issuingAgency: "UBND Tỉnh Bình Dương",
-    effectiveDate: "2021-10-01",
-    documentType: "Quyết định",
-    status: 'active'
-  },
-  {
-    id: 26,
-    title: "Thông tư số 11/2020/TT-BCA hướng dẫn về bảo hiểm cháy, nổ bắt buộc",
-    documentNumber: "11/2020/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2020-10-30",
-    documentType: "Thông tư",
-    status: 'active'
-  },
-  {
-    id: 27,
-    title: "Nghị quyết số 19/2023/NQ-HĐND về chính sách hỗ trợ trang bị phương tiện phòng cháy chữa cháy",
-    documentNumber: "19/2023/NQ-HĐND",
-    issuingAgency: "HĐND Tỉnh Đồng Nai",
-    effectiveDate: "2023-06-15",
-    documentType: "Nghị quyết",
-    status: 'active'
-  },
-  {
-    id: 28,
-    title: "Dự thảo Thông tư quy định về tiêu chuẩn kỹ thuật phương tiện phòng cháy chữa cháy",
-    documentNumber: "Dự thảo",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2025-04-01",
-    documentType: "Dự thảo Thông tư",
-    status: 'draft'
-  },
-  {
-    id: 29,
-    title: "Thông tư số 08/2019/TT-BCA quy định về quy chuẩn kỹ thuật quốc gia về phương tiện phòng cháy chữa cháy",
-    documentNumber: "08/2019/TT-BCA",
-    issuingAgency: "Bộ Công an",
-    effectiveDate: "2019-05-01",
-    documentType: "Thông tư",
-    status: 'expired'
-  },
-  {
-    id: 30,
-    title: "Quyết định số 42/2024/QĐ-TTg về chiến lược phát triển công tác phòng cháy chữa cháy đến năm 2030",
-    documentNumber: "42/2024/QĐ-TTg",
-    issuingAgency: "Thủ tướng Chính phủ",
-    effectiveDate: "2024-02-15",
-    documentType: "Quyết định",
-    status: 'active'
-  }
-]
+export function LegalDocumentsTable() {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+  const [data, setData] = React.useState<LegalDocument[]>([])
+  const [loading, setLoading] = React.useState(true)
+  const [error, setError] = React.useState<string | null>(null)
+  const [previewDialogOpen, setPreviewDialogOpen] = React.useState(false)
+  const [selectedDocument, setSelectedDocument] = React.useState<LegalDocument | null>(null)
 
-export const columns: ColumnDef<LegalDocument>[] = [
+  React.useEffect(() => {
+    const fetchDocuments = async () => {
+      try {
+        setLoading(true);
+        const documents = await getAllDocuments();
+        const mappedDocuments = documents.map(mapDocumentToLegalDocument);
+        setData(mappedDocuments);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching legal documents:', err);
+        setError('Không thể tải dữ liệu văn bản pháp lý. Vui lòng thử lại sau.');
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDocuments();
+  }, []);
+
+  const columns: ColumnDef<LegalDocument>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -399,7 +157,16 @@ export const columns: ColumnDef<LegalDocument>[] = [
       )
     },
     cell: ({ row }) => (
-      <div className="font-medium text-pccc-primary hover:underline cursor-pointer">
+      <div 
+        className="font-medium text-pccc-primary hover:underline cursor-pointer"
+        onClick={() => {
+          if (row.original.fileUrl) {
+            setSelectedDocument(row.original);
+            setPreviewDialogOpen(true);
+          }
+        }}
+        title={row.original.fileUrl ? "Xem chi tiết" : "Không có tệp đính kèm"}
+      >
         {row.getValue("title")}
       </div>
     ),
@@ -488,52 +255,25 @@ export const columns: ColumnDef<LegalDocument>[] = [
                   <FileText className="mr-2 h-4 w-4" />
                   Tải xuống
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    if (row.original.fileUrl) {
+                      setSelectedDocument(row.original);
+                      setPreviewDialogOpen(true);
+                    }
+                  }}
+                  disabled={!row.original.fileUrl}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
                   Xem chi tiết
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  Xóa
-                </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       )
     },
   },
 ]
-
-export function LegalDocumentsTable() {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
-  const [data, setData] = React.useState<LegalDocument[]>([])
-  const [loading, setLoading] = React.useState<boolean>(true)
-  const [error, setError] = React.useState<string | null>(null)
-
-  React.useEffect(() => {
-    const fetchDocuments = async () => {
-      try {
-        setLoading(true);
-        const documents = await getAllDocuments();
-        const mappedDocuments = documents.map(mapDocumentToLegalDocument);
-        setData(mappedDocuments);
-        setError(null);
-      } catch (err) {
-        console.error('Error fetching legal documents:', err);
-        setError('Không thể tải dữ liệu văn bản pháp lý. Vui lòng thử lại sau.');
-        // Use mock data as fallback
-        setData(mockData);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDocuments();
-  }, []);
 
   const table = useReactTable({
     data,
@@ -680,6 +420,16 @@ export function LegalDocumentsTable() {
         </div>
       </div>
       </>
+      )}
+      {/* Document Preview Dialog */}
+      {selectedDocument && (
+        <DocumentPreviewDialog
+          isOpen={previewDialogOpen}
+          onClose={() => setPreviewDialogOpen(false)}
+          documentUrl={selectedDocument.fileUrl || ''}
+          documentTitle={selectedDocument.title}
+          documentType={selectedDocument.documentType}
+        />
       )}
     </div>
   )
