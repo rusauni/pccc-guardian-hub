@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SupabaseProvider } from "@/contexts/SupabaseContext";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
+import { GlobalSearchProvider, SearchDialogContainer } from "@/components/GlobalSearchDialog";
 import Index from "./pages/Index";
 import NewsCategory from "./pages/NewsCategory";
 import VideoPage from "./pages/VideoPage";
@@ -36,11 +37,13 @@ const App = () => {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="light" storageKey="pccc-theme">
         <TooltipProvider>
-          <SupabaseProvider>
-            <Toaster />
-            <Sonner />
+          <GlobalSearchProvider>
+            <SupabaseProvider>
+              <Toaster />
+              <Sonner />
             <BrowserRouter>
-            <Routes>
+              <SearchDialogContainer />
+              <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tin-tuc-pccc" element={<NewsPage />} />
               <Route path="/huong-dan" element={<GuidelinesPage />} />
@@ -60,7 +63,8 @@ const App = () => {
               <Route path="*" element={<NotFound />} />
             </Routes>
             </BrowserRouter>
-          </SupabaseProvider>
+            </SupabaseProvider>
+          </GlobalSearchProvider>
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
