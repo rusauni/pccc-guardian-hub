@@ -49,7 +49,7 @@ const App = () => {
               <Route path="/huong-dan" element={<GuidelinesPage />} />
               <Route path="/huong-dan-cong-dong" element={<CommunityGuidelinesPage />} />
               <Route path="/huong-dan-nghiep-vu" element={<ProfessionalSkillsPage />} />
-              <Route path="/thu-tuc-hanh-chinh" element={<ProceduresPage />} />
+              <Route path="/thu-tuc-hanh-chinh" element={<NewsCategory />} />
               <Route path="/tai-lieu" element={<NewsCategory />} />
               <Route path="/van-ban-phap-quy" element={<NewsCategory />} />
               <Route path="/:category" element={<NewsCategory />} />

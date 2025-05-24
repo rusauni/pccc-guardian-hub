@@ -79,7 +79,11 @@ const mapDocumentToLegalDocument = (doc: Document): LegalDocument => {
   };
 };
 
-export function LegalDocumentsTable() {
+interface LegalDocumentsTableProps {
+  categoryId: number;
+}
+
+export function LegalDocumentsTable({ categoryId }: LegalDocumentsTableProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
@@ -97,13 +101,13 @@ export function LegalDocumentsTable() {
       try {
         setLoading(true);
         
-        // Fetch documents
-        const documents = await getAllDocumentByCategoryId(CATEGORIES.VAN_BAN_PHAP_QUY.id);
+        // Fetch documents using the provided categoryId
+        const documents = await getAllDocumentByCategoryId(categoryId);
         const mappedDocuments = documents.map(mapDocumentToLegalDocument);
         setData(mappedDocuments);
         
-        // Fetch subcategories from API for VAN_BAN_PHAP_QUY category
-        const apiSubcategories = await getSubCategoriesByCategoryId(CATEGORIES.VAN_BAN_PHAP_QUY.id);
+        // Fetch subcategories from API for the provided categoryId
+        const apiSubcategories = await getSubCategoriesByCategoryId(categoryId);
         
         // Create subcategory options for dropdown
         const subcategoryOptions = [{value: 'all', label: 'Tất cả danh mục'}];
@@ -125,7 +129,7 @@ export function LegalDocumentsTable() {
     };
 
     fetchData();
-  }, []);
+  }, [categoryId]); // Re-fetch when categoryId changes
 
   const columns: ColumnDef<LegalDocument>[] = [
   {

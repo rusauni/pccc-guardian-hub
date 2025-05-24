@@ -14,7 +14,7 @@ import {
   research, 
   videos 
 } from '@/data/mockData';
-import { getCategoryBySlug } from '@/data/categories';
+import { getCategoryBySlug, CATEGORIES } from '@/data/categories';
 
 const getCategoryData = (categorySlug: string) => {
   // Get category from centralized data
@@ -45,8 +45,15 @@ const getCategoryData = (categorySlug: string) => {
 const NewsCategory = () => {
   const { category } = useParams<{ category: string }>();
   const pathname = window.location.pathname;
-  const categoryValue = pathname === '/van-ban-phap-quy' ? 'van-ban-phap-quy' : category || '';
+  const categoryValue = pathname === '/van-ban-phap-quy' ? 'van-ban-phap-quy' : 
+                      pathname === '/thu-tuc-hanh-chinh' ? 'thu-tuc-hanh-chinh' : 
+                      category || '';
   const { title, data } = getCategoryData(categoryValue);
+  
+  // Determine if we should use the table view and which category ID to use
+  const useTableView = categoryValue === 'van-ban-phap-quy' || categoryValue === 'thu-tuc-hanh-chinh';
+  const tableCategory = categoryValue === 'van-ban-phap-quy' ? CATEGORIES.VAN_BAN_PHAP_QUY.id : 
+                        categoryValue === 'thu-tuc-hanh-chinh' ? CATEGORIES.THU_TUC_HANH_CHINH.id : 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900">
@@ -59,8 +66,8 @@ const NewsCategory = () => {
             <h1 className="text-2xl font-bold text-pccc-dark dark:text-white">{title}</h1>
           </div>
           
-          {categoryValue === 'van-ban-phap-quy' ? (
-            <LegalDocumentsTable />
+          {useTableView ? (
+            <LegalDocumentsTable categoryId={tableCategory} />
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {data.map((item) => (
