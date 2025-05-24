@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { NavItem } from './types';
 import SearchToggle from './SearchToggle';
+import { ThemeToggle } from '../theme/ThemeToggle';
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -24,23 +25,29 @@ const MobileMenu = ({ isOpen, onClose, mainNavigation }: MobileMenuProps) => {
         <div className="w-full">
           <div className="flex items-center justify-between p-4 border-b">
             <Link to="/" className="flex items-center space-x-2" onClick={onClose}>
-              <img src="/placeholder.svg" alt="PCCC Logo" className="h-8 w-8" />
+              <img 
+                src="/favicon-32x32.png" 
+                alt="PCCC40 Logo" 
+                className="h-8 w-8 object-contain bg-transparent" 
+                width={32}
+                height={32}
+              />
               <span className="font-bold inline-block">PCCC40</span>
             </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-            >
-              <X className="h-5 w-5" aria-hidden="true" />
-              <span className="sr-only">Close menu</span>
-            </Button>
+            <div className="flex items-center space-x-2">
+              <ThemeToggle />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+              >
+                <X className="h-5 w-5" aria-hidden="true" />
+                <span className="sr-only">Close menu</span>
+              </Button>
+            </div>
           </div>
           
-          {/* Search toggle in mobile menu */}
-          <div className="p-4">
-            <SearchToggle isSearchIconOnly={false} />
-          </div>
+          {/* Search toggle removed as requested */}
           
           <div className="mt-2 p-4 space-y-1">
             {mainNavigation.map((item) => 

@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { SupabaseProvider } from "@/contexts/SupabaseContext";
 import { ThemeProvider } from "@/contexts/ThemeProvider";
 import { GlobalSearchProvider, SearchDialogContainer } from "@/components/GlobalSearchDialog";
@@ -43,6 +43,7 @@ const App = () => {
               <Sonner />
             <BrowserRouter>
               <SearchDialogContainer />
+              <ScrollToTop />
               <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/tin-tuc-pccc" element={<NewsPage />} />
@@ -69,6 +70,18 @@ const App = () => {
       </ThemeProvider>
     </QueryClientProvider>
   );
+};
+
+// Component to handle scroll restoration when navigating between routes
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  
+  useEffect(() => {
+    // When route changes, scroll to top of page
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  
+  return null;
 };
 
 export default App;

@@ -45,6 +45,7 @@ const Navbar = () => {
           </div>
           <div className="flex items-center space-x-2 md:hidden">
             <SearchToggle isSearchIconOnly={false} />
+            <ThemeToggle />
             <MobileMenuToggle onToggle={() => setMobileMenuOpen(true)} />
           </div>
         </div>
