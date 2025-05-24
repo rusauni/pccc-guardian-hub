@@ -38,6 +38,7 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { Document } from "@/models/Document"
 import { getAllDocumentByCategoryId } from "@/repository/GetAllDocumentByCategoryId"
+import { getSubCategoriesByCategoryId } from "@/repository/GetAllSubCategory"
 import { CATEGORIES } from "@/data/categories"
 import { DocumentPreviewDialog } from "@/components/DocumentPreviewDialog"
 
@@ -52,6 +53,7 @@ export interface LegalDocument {
   file?: string
   fileUrl?: string
   description?: string | null
+  subcategoryName?: string
 }
 
 /**
@@ -71,6 +73,8 @@ const mapDocumentToLegalDocument = (doc: Document): LegalDocument => {
     status: 'active', // Default status is 'active' (Còn hiệu lực)
     file: doc.file,
     fileUrl: doc.fileUrl,
+    // Add subcategory name if available
+    subcategoryName: doc.sub_category?.sub_name,
     description: doc.description
   };
 };
@@ -85,25 +89,42 @@ export function LegalDocumentsTable() {
   const [error, setError] = React.useState<string | null>(null)
   const [previewDialogOpen, setPreviewDialogOpen] = React.useState(false)
   const [selectedDocument, setSelectedDocument] = React.useState<LegalDocument | null>(null)
+  const [subcategories, setSubcategories] = React.useState<{value: string, label: string}[]>([])
+  const [selectedSubcategory, setSelectedSubcategory] = React.useState<string>('all')
 
   React.useEffect(() => {
-    const fetchDocuments = async () => {
+    const fetchData = async () => {
       try {
         setLoading(true);
+        
+        // Fetch documents
         const documents = await getAllDocumentByCategoryId(CATEGORIES.VAN_BAN_PHAP_QUY.id);
         const mappedDocuments = documents.map(mapDocumentToLegalDocument);
         setData(mappedDocuments);
+        
+        // Fetch subcategories from API for VAN_BAN_PHAP_QUY category
+        const apiSubcategories = await getSubCategoriesByCategoryId(CATEGORIES.VAN_BAN_PHAP_QUY.id);
+        
+        // Create subcategory options for dropdown
+        const subcategoryOptions = [{value: 'all', label: 'Tất cả danh mục'}];
+        apiSubcategories.forEach(subcategory => {
+          subcategoryOptions.push({
+            value: subcategory.sub_name,
+            label: subcategory.sub_name
+          });
+        });
+        
+        setSubcategories(subcategoryOptions);
         setError(null);
       } catch (err) {
-        console.error('Error fetching legal documents:', err);
-        setError('Không thể tải dữ liệu văn bản pháp lý. Vui lòng thử lại sau.');
-
+        console.error('Error fetching data:', err);
+        setError('Không thể tải dữ liệu. Vui lòng thử lại sau.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchDocuments();
+    fetchData();
   }, []);
 
   const columns: ColumnDef<LegalDocument>[] = [
@@ -202,7 +223,7 @@ export function LegalDocumentsTable() {
       }
       
       try {
-        const date = new Date(effectiveDate);
+        const date = new Date(effectiveDate as string);
         // Check if date is valid
         if (isNaN(date.getTime())) {
           return <div className="pl-4">--</div>;
@@ -293,8 +314,16 @@ export function LegalDocumentsTable() {
   },
 ]
 
+  // Apply subcategory filter to data
+  const displayData = React.useMemo(() => {
+    if (selectedSubcategory === 'all') {
+      return data;
+    }
+    return data.filter(doc => doc.subcategoryName === selectedSubcategory);
+  }, [data, selectedSubcategory]);
+
   const table = useReactTable({
-    data,
+    data: displayData,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -312,6 +341,17 @@ export function LegalDocumentsTable() {
     },
   })
 
+  // Filter data based on selected subcategory
+  const filteredData = React.useMemo(() => {
+    if (selectedSubcategory === 'all') {
+      return data;
+    }
+    return data.filter(doc => {
+      // Check if the document has a subcategory that matches the selected one
+      return doc.subcategoryName === selectedSubcategory;
+    });
+  }, [data, selectedSubcategory]);
+
   return (
     <div className="w-full">
       {loading ? (
@@ -325,46 +365,61 @@ export function LegalDocumentsTable() {
         </div>
       ) : (
       <>
-        <div className="flex items-center py-4">
-          <Input
-            placeholder="Tìm kiếm văn bản..."
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("title")?.setFilterValue(event.target.value)
-            }
-            className="max-w-sm"
-          />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto">
-              Cột hiển thị <ChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id === "documentNumber" && "Số hiệu văn bản"}
-                    {column.id === "title" && "Tên văn bản"}
-                    {column.id === "issuingAgency" && "Cơ quan ban hành"}
-                    {column.id === "effectiveDate" && "Ngày hiệu lực"}
-                    {column.id === "documentType" && "Loại văn bản"}
-                    {column.id === "status" && "Trạng thái"}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <div className="flex flex-col space-y-4 py-4">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <span className="text-sm font-medium">Danh mục:</span>
+              <select
+                value={selectedSubcategory}
+                onChange={(e) => setSelectedSubcategory(e.target.value)}
+                className="rounded-md border border-input bg-background px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              >
+                {subcategories.map((subcategory) => (
+                  <option key={subcategory.value} value={subcategory.value}>
+                    {subcategory.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Input
+              placeholder="Tìm kiếm văn bản..."
+              value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                table.getColumn("title")?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="ml-auto">
+                  Cột hiển thị <ChevronDown className="ml-2 h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }
+                      >
+                        {column.id === "documentNumber" && "Số hiệu văn bản"}
+                        {column.id === "title" && "Tên văn bản"}
+                        {column.id === "issuingAgency" && "Cơ quan ban hành"}
+                        {column.id === "effectiveDate" && "Ngày hiệu lực"}
+                        {column.id === "documentType" && "Loại văn bản"}
+                        {column.id === "status" && "Trạng thái"}
+                      </DropdownMenuCheckboxItem>
+                    )
+                  })}
+              </DropdownMenuContent>
+            </DropdownMenu>
       </div>
       <div className="rounded-md border">
         <Table>
@@ -436,7 +491,8 @@ export function LegalDocumentsTable() {
             Sau
           </Button>
         </div>
-      </div>
+          </div>
+        </div>
       </>
       )}
       {/* Document Preview Dialog */}

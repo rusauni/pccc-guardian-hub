@@ -24,7 +24,9 @@ export interface Document {
     agency_name: string;
   };
   effective_date?: string;
-  sub_category?: string | null;
+  sub_category?: {
+    sub_name: string;
+  } | null;
   tags?: number[];
 }
 

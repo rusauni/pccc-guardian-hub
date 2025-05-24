@@ -13,7 +13,7 @@ export const getAllDocumentByCategoryId = async (categoryId: number): Promise<Do
       `${API_BASE}/items/documents`, {
         params: {
           'filter[category][_eq]': categoryId,
-          'fields': 'id,title,file,description,category.name,document_number,sub_category,agency_id,document_type_id,agency_id.agency_name,document_type_id.document_type_name,effective_date'
+          'fields': 'id,title,file,description,category.name,document_number,sub_category,agency_id,document_type_id,agency_id.agency_name,document_type_id.document_type_name,effective_date,sub_category.sub_name'
         },
         headers: {
           'Accept': 'application/json'
