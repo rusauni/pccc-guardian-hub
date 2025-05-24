@@ -16,6 +16,7 @@ interface VideoItem {
   thumbnailUrl: string;
   date_created: string;
   slug: string;
+  videoUrl: string;
   category: {
     name: string;
     slug: string;
