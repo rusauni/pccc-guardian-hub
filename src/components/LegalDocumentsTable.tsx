@@ -36,7 +36,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
-import { Document, getAllDocuments } from "@/repository/GetAllDocuments"
+import { Document } from "@/models/Document"
+import { getAllDocumentByCategoryId } from "@/repository/GetAllDocumentByCategoryId"
+import { CATEGORIES } from "@/data/categories"
 import { DocumentPreviewDialog } from "@/components/DocumentPreviewDialog"
 
 export interface LegalDocument {
@@ -61,9 +63,11 @@ const mapDocumentToLegalDocument = (doc: Document): LegalDocument => {
     id: doc.id,
     title: doc.title,
     documentNumber: doc.document_number,
-    issuingAgency: doc.issuing_agency,
-    effectiveDate: doc.effective_date,
-    documentType: doc.document_type,
+    // Use agency_id.agency_name if available, otherwise fallback to issuing_agency
+    issuingAgency: doc.agency_id?.agency_name || '',
+    effectiveDate: doc.effective_date || '',
+    // Use document_type_id.document_type_name if available, otherwise fallback to document_type
+    documentType: doc.document_type_id?.document_type_name || '',
     status: 'active', // Default status is 'active' (Còn hiệu lực)
     file: doc.file,
     fileUrl: doc.fileUrl,
@@ -86,7 +90,7 @@ export function LegalDocumentsTable() {
     const fetchDocuments = async () => {
       try {
         setLoading(true);
-        const documents = await getAllDocuments();
+        const documents = await getAllDocumentByCategoryId(CATEGORIES.VAN_BAN_PHAP_QUY.id);
         const mappedDocuments = documents.map(mapDocumentToLegalDocument);
         setData(mappedDocuments);
         setError(null);
@@ -192,8 +196,22 @@ export function LegalDocumentsTable() {
       )
     },
     cell: ({ row }) => {
-      const date = new Date(row.getValue("effectiveDate"))
-      return <div className="pl-4">{format(date, "dd/MM/yyyy", { locale: vi })}</div>
+      const effectiveDate = row.getValue("effectiveDate");
+      if (!effectiveDate) {
+        return <div className="pl-4">--</div>;
+      }
+      
+      try {
+        const date = new Date(effectiveDate);
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+          return <div className="pl-4">--</div>;
+        }
+        return <div className="pl-4">{format(date, "dd/MM/yyyy", { locale: vi })}</div>;
+      } catch (error) {
+        console.error("Error formatting date:", error);
+        return <div className="pl-4">--</div>;
+      }
     },
   },
   {
