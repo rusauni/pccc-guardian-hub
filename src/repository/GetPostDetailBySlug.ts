@@ -76,7 +76,7 @@ export const getPostDetailBySlug = async (slug: string): Promise<PostDetail | nu
       if (post.content?.blocks) {
         post.content = {
           ...post.content,
-          blocks: processContentBlocks(post.content.blocks)
+          blocks: post.content.blocks
         };
       }
       
