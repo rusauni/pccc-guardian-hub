@@ -16,6 +16,8 @@ interface EditorJSBlock {
     code?: string;
     title?: string;
     message?: string;
+    service?: string;
+    embed?: string;
     meta?: {
       title?: string;
       description?: string;
@@ -156,8 +158,25 @@ export async function parseEditorContent(editorData: any): Promise<string> {
           break;
 
         case 'embed':
-          if (block.data?.html) {
-            // Always center embeds (videos) by default
+          if (block.data?.service === 'youtube' && block.data.embed) {
+            // Handle YouTube embeds with the new format
+            html += `
+              <div class="my-6 aspect-video w-full max-w-4xl mx-auto">
+                <div class="relative h-0 pb-[56.25%] overflow-hidden rounded-lg">
+                  <iframe 
+                    src="${block.data.embed}" 
+                    class="absolute top-0 left-0 w-full h-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen>
+                  </iframe>
+                </div>
+                ${block.data.caption ? `<p class="text-center text-sm text-gray-600 mt-2">${block.data.caption}</p>` : ''}
+              </div>
+            `;
+          } else if (block.data?.html) {
+            // Handle existing HTML embeds
             html += `
               <div class="my-6 aspect-video w-full max-w-4xl mx-auto">
                 <div class="relative h-0 pb-[56.25%] overflow-hidden rounded-lg">
